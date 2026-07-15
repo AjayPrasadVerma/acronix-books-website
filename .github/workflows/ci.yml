@@ -1,0 +1,53 @@
+name: CI
+
+# The authoritative quality gate (CLAUDE.md §8). Until this existed the gate was
+# only real when someone remembered to run it locally.
+on:
+  push:
+    branches: [features, master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # package.json + the lockfile live in client/, not the repo root.
+        working-directory: client
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # `uses:` steps ignore defaults.run.working-directory, so both actions are
+      # pointed at client/ explicitly. action-setup reads the pnpm version from
+      # the `packageManager` field, and there is no root package.json.
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: client/package.json
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          # Repo-root path — .nvmrc sits above client/.
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: client/pnpm-lock.yaml
+
+      # --frozen-lockfile makes an out-of-date lockfile a build failure rather
+      # than something CI silently resolves around.
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      # `next build` also typechecks (next.config.mjs sets
+      # typescript.ignoreBuildErrors: false) and produces the static export.
+      - name: Build
+        run: pnpm build
