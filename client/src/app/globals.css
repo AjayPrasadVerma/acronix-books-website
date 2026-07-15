@@ -129,8 +129,19 @@ body {
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
 }
 
+/* Clipping a gradient to text means `color` MUST be transparent — so if the
+ * gradient ever fails to resolve, the text renders invisible rather than
+ * merely unstyled. One undefined custom property is enough to invalidate the
+ * whole linear-gradient() and silently blank a headline. Every stop therefore
+ * carries a literal fallback: this rule degrades to a solid-ish gradient, never
+ * to nothing. Do not remove the fallbacks. */
 .text-gradient {
-  background: linear-gradient(120deg, var(--color-brand-600), var(--color-brand-400) 60%, var(--color-accent));
+  background-image: linear-gradient(
+    120deg,
+    var(--color-brand-600, #2e63e6),
+    var(--color-brand-400, #6b9bff) 60%,
+    var(--color-accent, #14b8a6)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -319,8 +330,14 @@ body {
   --color-secondary-foreground: var(--acx-secondary-fg);
   --color-muted: var(--acx-muted);
   --color-muted-foreground: var(--acx-muted-fg);
-  --color-accent: var(--acx-accent);
-  --color-accent-foreground: var(--acx-accent-fg);
+  /* NOTE: `accent` is deliberately NOT mapped here. The site's own palette
+   * already owns --color-accent (#14b8a6, defined in the @theme above), and
+   * because this block comes later it would win the cascade and resolve to
+   * var(--acx-accent) — which only exists inside `.acx-app`. Site-level
+   * consumers like .text-gradient would then get an undefined stop, making the
+   * whole gradient invalid and the text invisible. Nothing consumes bg-accent
+   * /text-accent, so the mapping was dead weight anyway. Mockups needing the
+   * app's accent should use var(--acx-accent) directly inside `.acx-app`. */
   --color-destructive: var(--acx-destructive);
   --color-destructive-foreground: var(--acx-destructive-fg);
   --color-border: var(--acx-border);
