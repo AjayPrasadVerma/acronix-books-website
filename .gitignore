@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Environment — a static export inlines env at build time, so nothing secret
+# belongs in this repo at all (CLAUDE.md §9). Ignored as a backstop.
+.env
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editors
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
