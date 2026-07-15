@@ -4,6 +4,10 @@
   "private": true,
   "description": "Acronix Books marketing, download & documentation website (Next.js, static export)",
   "type": "module",
+  "packageManager": "pnpm@11.5.3",
+  "engines": {
+    "node": ">=20.9"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,7 +16,7 @@
     "serve": "npx serve out"
   },
   "dependencies": {
-    "next": "latest",
+    "next": "^16.2.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "lucide-react": "^0.469.0"

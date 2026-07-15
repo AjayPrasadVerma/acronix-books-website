@@ -1,0 +1,12 @@
+# Not a multi-package workspace — this repo ships one app. The file exists
+# because pnpm 11 reads its build allowlist from here and requires every
+# dependency with an install script to be explicitly decided (true = run it,
+# false = skip it). An undecided entry fails `pnpm install` outright with
+# ERR_PNPM_IGNORED_BUILDS, which would break CI.
+#
+#  - sharp: Next's image-optimization binary. next.config.mjs sets
+#    `images: { unoptimized: true }` because a static export cannot use the
+#    on-demand optimizer, so sharp is never invoked — skip the native build.
+#    (Same decision, same reason, as the acronix-books monorepo.)
+allowBuilds:
+  sharp: false
