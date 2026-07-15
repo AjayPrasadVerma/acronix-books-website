@@ -1,5 +1,0 @@
-User-Agent: *
-Allow: /
-
-Host: https://acronixbooks.com
-Sitemap: https://acronixbooks.com/sitemap.xml
