@@ -47,6 +47,39 @@ export const updateFeed = {
   windowsInstaller: 'https://acronixbooks.com/updates/AcronixBooks-Setup-latest.exe',
 } as const;
 
+/**
+ * The commercial model. These numbers are ENFORCED BY THE SHIPPED APP — they
+ * mirror `packages/shared/src/billing/contracts.ts` in the product repo
+ * (`planSchema`, `TRIAL_DAYS`, `GRACE_DAYS`). If those change, change these in
+ * the same breath: a pricing page that disagrees with the binary is a promise
+ * the software then breaks.
+ *
+ * There is exactly ONE plan. The product repo's enum is `z.enum(['standard'])`
+ * with the comment "Only one plan exists in v1" — so there are no Start/Smart/
+ * Power-style editions to advertise, and we do not invent them.
+ */
+export const plan = {
+  id: 'standard',
+  name: 'Standard',
+  /** Free, full-featured evaluation window for a new account. */
+  trialDays: 14,
+  /**
+   * Extra days of FULL access after the trial/paid period ends — the client's
+   * entitlement runs to `periodEnd + graceDays`. Only after that does the app
+   * fall back to read-only. It never locks you out of your own books: the data
+   * is local, and reading + exporting keep working indefinitely.
+   */
+  graceDays: 7,
+  /**
+   * `null` until the real number is decided — the UI renders an honest
+   * "pricing to be announced" instead of a placeholder figure. Never put a
+   * speculative price here; people make purchasing decisions on this page.
+   */
+  price: null as number | null,
+  currency: 'INR',
+  period: 'year',
+} as const;
+
 export type Platform = 'windows' | 'mac' | 'linux' | 'unknown';
 
 export interface DownloadTarget {
