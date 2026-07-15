@@ -1,0 +1,42 @@
+---
+title: Backup & restore
+description: Create encrypted local backups of your book, restore them on the same or a new machine, and build a backup habit that protects your data.
+category: Data & security
+order: 1
+---
+
+Your books live on your computer, so backups are how you protect against a failed disk, a lost laptop or a mistaken bulk change. Acronix Books makes encrypted backups quick and safe.
+
+## How backups work
+
+Acronix Books creates a backup using SQLite's **`VACUUM INTO`**, which writes a clean, compact copy of your database. The backup file is **encrypted** just like your live book — it carries no plaintext, so it's safe to store on an external drive or the cloud.
+
+## Create a backup
+
+1. Open **Settings → Backup**.
+2. Choose **Create backup** and pick a destination folder.
+3. Acronix Books writes a timestamped, encrypted backup file.
+
+<Callout type="tip" title="A simple, reliable rhythm">
+Back up after every GST filing, at each month-end, and before any large import or bulk edit. Keep at least one copy on a separate device or drive — a backup that sits only on the same disk as the original doesn't protect you from disk failure.
+</Callout>
+
+## Restore a backup
+
+1. Open **Settings → Backup → Restore** (or choose restore during onboarding on a fresh install).
+2. Select the backup file.
+3. Provide the credentials that protect it. Because the backup is encrypted, restoring requires the password / recovery code tied to that book.
+4. Acronix Books verifies and opens the restored book.
+
+<Callout type="warn" title="Restoring replaces the current book">
+A restore brings back the state captured in the backup file. Any entries made after that backup are not in it. Take a fresh backup of the current book before restoring an older one if you might need the recent data.
+</Callout>
+
+## Backups vs cloud sync
+
+Local backups and [cloud sync](/docs/cloud-sync/) complement each other:
+
+- **Local backup** — a point-in-time snapshot you control, ideal for archives and off-site copies.
+- **Cloud sync** — continuous, isolated, encrypted backup of your whole book that also enables [fresh-device restore](/docs/cloud-sync/).
+
+For most businesses, using both is the safest setup.

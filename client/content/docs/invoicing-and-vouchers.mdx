@@ -1,0 +1,63 @@
+---
+title: Invoicing & vouchers
+description: Understand the full voucher set, create a GST sales invoice, record payments and receipts, and use voucher series and bill-wise references.
+category: Daily use
+order: 1
+---
+
+Every transaction in Acronix Books is recorded as a **voucher**. All ten voucher types are driven by one shared voucher form and post through a single double-entry engine into one canonical ledger, so your books stay correct while staying quick to enter.
+
+## The voucher types
+
+| Voucher | Use it for |
+| --- | --- |
+| **Sale** | Selling goods or services — produces a GST tax invoice |
+| **Purchase** | Buying goods or services from a supplier |
+| **Receipt** | Money received (from a customer, or any income) |
+| **Payment** | Money paid out (to a supplier, or any expense) |
+| **Contra** | Transfers between cash and bank, or between banks |
+| **Journal** | Adjustments, provisions and non-cash entries |
+| **Credit note** | Sales returns or reductions against an invoice |
+| **Debit note** | Purchase returns or reductions against a bill |
+| **Delivery challan** | Move goods without immediately raising a tax invoice |
+| **Stock journal** | Inter-warehouse transfers, adjustments and production |
+
+<Callout type="info" title="One master for every account">
+Parties, banks, cash, tax and general accounts all live in a single **merged ledger master** — there's no separate customer or supplier table. You pick the same kind of ledger whichever voucher you're in.
+</Callout>
+
+## Create a sales invoice
+
+1. Open **Sales** and start a new voucher.
+2. Pick the **voucher series** and date (the invoice number auto-increments within the series).
+3. Choose the **party ledger** (your customer). Their state decides the tax split.
+4. Add line items. For each item, Acronix Books pulls the **HSN code** and **tax category**, then computes CGST + SGST (intra-state) or IGST (inter-state) automatically.
+5. Review the totals, add any notes or terms, and press **F10** to save.
+6. Print or export the invoice to PDF, or export to Excel.
+
+<Callout type="tip" title="Let the keyboard do the work">
+You rarely need the mouse. <code>Enter</code> and <code>Tab</code> move between fields, item rows accept typed quantities and rates, and <code>F10</code> saves the voucher. See [Keyboard shortcuts](/docs/keyboard-shortcuts/).
+</Callout>
+
+## Receipts and payments
+
+- Record a **receipt** when a customer pays you. Select the bank or cash ledger, the party, and the amount.
+- Record a **payment** for supplier settlements and expenses.
+- Use **bill-wise references** to tie a receipt or payment to specific invoices, so outstanding balances stay accurate.
+
+## Voucher series
+
+A **voucher series** is a numbering scheme (for example `INV/2026-27/001`). Series let you:
+
+- Keep separate number ranges per branch, product line or document type.
+- Reset numbering cleanly at the start of each financial year.
+- Maintain continuous, auditable invoice numbers as required for GST.
+
+<Callout type="info" title="Correcting a mistake">
+Prefer a credit note or debit note to reverse a posted invoice rather than deleting it — this keeps a clean audit trail. Every change is recorded in the [tamper-evident audit log](/docs/security/).
+</Callout>
+
+## Next
+
+- Generate returns from these invoices — [GST filing](/docs/gst-filing/).
+- Pull statements and summaries — [Reports & exports](/docs/reports-and-exports/).

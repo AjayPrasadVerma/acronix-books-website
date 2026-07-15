@@ -1,0 +1,407 @@
+@import 'tailwindcss';
+
+/* Drive the `dark:` variant from our `data-theme` attribute (set by
+ * ThemeScript / ThemeToggle) instead of the OS `prefers-color-scheme`, so the
+ * in-page theme toggle actually flips every `dark:` utility. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ------------------------------------------------------------------ *
+ * Acronix Books — design tokens
+ * Brand blue #2E63E6 (light) / #6B9BFF (dark accent), matching the app's
+ * BrandMark. Tailwind v4: theme is declared here, no tailwind.config.js.
+ * ------------------------------------------------------------------ */
+@theme {
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display:
+    var(--font-display), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', 'JetBrains Mono', Menlo, monospace;
+
+  /* Brand ramp */
+  --color-brand-50: #eef3ff;
+  --color-brand-100: #dbe5ff;
+  --color-brand-200: #bccfff;
+  --color-brand-300: #93b0ff;
+  --color-brand-400: #6b9bff;
+  --color-brand-500: #4a7dfb;
+  --color-brand-600: #2e63e6;
+  --color-brand-700: #234fc4;
+  --color-brand-800: #1e419e;
+  --color-brand-900: #1d3a7d;
+  --color-brand-950: #16244c;
+
+  /* Ink / neutral ramp (cool slate) */
+  --color-ink-50: #f7f9fc;
+  --color-ink-100: #eef2f8;
+  --color-ink-200: #dde4ef;
+  --color-ink-300: #c2cee0;
+  --color-ink-400: #93a3bd;
+  --color-ink-500: #6b7c99;
+  --color-ink-600: #4d5d78;
+  --color-ink-700: #38455c;
+  --color-ink-800: #232d3f;
+  --color-ink-900: #141a26;
+  --color-ink-950: #0b0f17;
+
+  --color-accent: #14b8a6;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+}
+
+/* Semantic surface variables, flipped for dark mode */
+:root {
+  --bg: #ffffff;
+  --bg-subtle: var(--color-ink-50);
+  --bg-elevated: #ffffff;
+  --border: var(--color-ink-200);
+  --border-strong: var(--color-ink-300);
+  --fg: var(--color-ink-900);
+  --fg-muted: var(--color-ink-600);
+  --fg-subtle: var(--color-ink-500);
+  --brand: var(--color-brand-600);
+  --brand-fg: #ffffff;
+  --ring: var(--color-brand-500);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'],
+.dark {
+  --bg: #0b0f17;
+  --bg-subtle: #0f1622;
+  --bg-elevated: #131c2b;
+  --border: #23304a;
+  --border-strong: #2f3f5f;
+  --fg: #eef2f8;
+  --fg-muted: #a9b6cc;
+  --fg-subtle: #7d8ba6;
+  --brand: var(--color-brand-400);
+  --brand-fg: #0b0f17;
+  --ring: var(--color-brand-400);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0b0f17;
+    --bg-subtle: #0f1622;
+    --bg-elevated: #131c2b;
+    --border: #23304a;
+    --border-strong: #2f3f5f;
+    --fg: #eef2f8;
+    --fg-muted: #a9b6cc;
+    --fg-subtle: #7d8ba6;
+    --brand: var(--color-brand-400);
+    --brand-fg: #0b0f17;
+    --ring: var(--color-brand-400);
+    color-scheme: dark;
+  }
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand) 28%, transparent);
+}
+
+/* Utility: subtle grid/dot background used behind the hero */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--fg) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--fg) 6%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, var(--color-brand-600), var(--color-brand-400) 60%, var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Prose — long-form docs & blog content
+ * ------------------------------------------------------------------ */
+.prose {
+  color: var(--fg-muted);
+  line-height: 1.75;
+  font-size: 1rem;
+  max-width: 46rem;
+}
+.prose > * + * {
+  margin-top: 1.15em;
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--fg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 6rem;
+  line-height: 1.25;
+}
+.prose h1 {
+  font-size: 2.1rem;
+  margin-top: 0;
+}
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.4em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+.prose h3 {
+  font-size: 1.2rem;
+  margin-top: 1.9em;
+}
+.prose strong {
+  color: var(--fg);
+  font-weight: 650;
+}
+.prose a {
+  color: var(--brand);
+  font-weight: 550;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--brand) 40%, transparent);
+}
+.prose a:hover {
+  text-decoration-color: var(--brand);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin-top: 0.4em;
+}
+.prose li::marker {
+  color: var(--fg-subtle);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+  color: var(--fg);
+}
+.prose pre {
+  background: var(--color-ink-950);
+  color: var(--color-ink-100);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.prose blockquote {
+  border-left: 3px solid var(--brand);
+  padding-left: 1.1rem;
+  color: var(--fg-muted);
+  font-style: italic;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  display: block;
+  overflow-x: auto;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.8rem;
+  text-align: left;
+}
+.prose th {
+  background: var(--bg-subtle);
+  color: var(--fg);
+  font-weight: 600;
+}
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5em 0;
+}
+.prose .anchor {
+  color: var(--fg-subtle);
+  text-decoration: none;
+  margin-left: 0.4rem;
+  opacity: 0;
+  font-weight: 400;
+}
+.prose h2:hover .anchor,
+.prose h3:hover .anchor {
+  opacity: 1;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-fade-up {
+    animation: none;
+  }
+}
+
+/* ================================================================== *
+ * Embedded desktop-app UI theme — used ONLY inside `.acx-app` wrappers
+ * for the product mockups. Ported 1:1 from
+ * apps/desktop/src/renderer/src/styles.css so the mockups render with the
+ * real app tokens. Values are scoped to `.acx-app` and flip with the site's
+ * data-theme, so the mockups match the app in BOTH light and dark. The
+ * semantic color utilities (bg-surface, text-debit, …) below are inert
+ * outside `.acx-app` (the site itself never uses them).
+ * ================================================================== */
+@theme {
+  --color-background: var(--acx-bg);
+  --color-foreground: var(--acx-fg);
+  --color-surface: var(--acx-surface);
+  --color-surface-elevated: var(--acx-surface-elevated);
+  --color-card: var(--acx-card);
+  --color-popover: var(--acx-popover);
+  --color-primary: var(--acx-primary);
+  --color-primary-foreground: var(--acx-primary-fg);
+  --color-secondary: var(--acx-secondary);
+  --color-secondary-foreground: var(--acx-secondary-fg);
+  --color-muted: var(--acx-muted);
+  --color-muted-foreground: var(--acx-muted-fg);
+  --color-accent: var(--acx-accent);
+  --color-accent-foreground: var(--acx-accent-fg);
+  --color-destructive: var(--acx-destructive);
+  --color-destructive-foreground: var(--acx-destructive-fg);
+  --color-border: var(--acx-border);
+  --color-input: var(--acx-input);
+  --color-input-border: var(--acx-input-border);
+  --color-ring: var(--acx-ring);
+  --color-credit: var(--acx-credit);
+  --color-credit-foreground: var(--acx-credit-fg);
+  --color-debit: var(--acx-debit);
+  --color-debit-foreground: var(--acx-debit-fg);
+  --color-warning: var(--acx-warning);
+  --color-warning-foreground: var(--acx-warning-fg);
+  --color-bar: var(--acx-bar);
+  --color-bar-foreground: var(--acx-bar-fg);
+}
+
+.acx-app {
+  /* Light — deep navy primary, cool slate neutrals (app :root) */
+  --acx-bg: oklch(0.985 0.004 245);
+  --acx-fg: oklch(0.16 0.025 255);
+  --acx-surface: oklch(1 0 0);
+  --acx-surface-elevated: oklch(0.99 0.003 245);
+  --acx-card: oklch(1 0 0);
+  --acx-popover: oklch(1 0 0);
+  --acx-primary: oklch(0.5 0.2 258);
+  --acx-primary-fg: oklch(0.99 0 0);
+  --acx-secondary: oklch(0.96 0.01 250);
+  --acx-secondary-fg: oklch(0.22 0.04 255);
+  --acx-muted: oklch(0.96 0.006 250);
+  --acx-muted-fg: oklch(0.48 0.025 255);
+  --acx-accent: oklch(0.94 0.015 255);
+  --acx-accent-fg: oklch(0.22 0.04 255);
+  --acx-destructive: oklch(0.56 0.22 25);
+  --acx-destructive-fg: oklch(0.99 0 0);
+  --acx-border: oklch(0.89 0.012 250);
+  --acx-input: oklch(0.97 0.005 250);
+  --acx-input-border: oklch(0.89 0.012 250);
+  --acx-ring: oklch(0.5 0.2 258);
+  --acx-credit: oklch(0.5 0.15 152);
+  --acx-credit-fg: oklch(0.99 0 0);
+  --acx-debit: oklch(0.55 0.22 25);
+  --acx-debit-fg: oklch(0.99 0 0);
+  --acx-warning: oklch(0.7 0.16 75);
+  --acx-warning-fg: oklch(0.2 0.05 75);
+  --acx-bar: oklch(0.97 0.008 250);
+  --acx-bar-fg: oklch(0.32 0.025 255);
+
+  background-color: var(--acx-bg);
+  color: var(--acx-fg);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+:where([data-theme='dark']) .acx-app {
+  /* Dark — Acronix dark product family (app [data-theme='dark']) */
+  --acx-bg: oklch(0.13 0.022 255);
+  --acx-fg: oklch(0.93 0.008 250);
+  --acx-surface: oklch(0.19 0.025 258);
+  --acx-surface-elevated: oklch(0.225 0.028 260);
+  --acx-card: oklch(0.19 0.025 258);
+  --acx-popover: oklch(0.22 0.028 260);
+  --acx-primary: oklch(0.65 0.19 258);
+  --acx-primary-fg: oklch(0.99 0 0);
+  --acx-secondary: oklch(0.245 0.022 258);
+  --acx-secondary-fg: oklch(0.9 0.008 250);
+  --acx-muted: oklch(0.23 0.022 258);
+  --acx-muted-fg: oklch(0.66 0.025 255);
+  --acx-accent: oklch(0.27 0.03 260);
+  --acx-accent-fg: oklch(0.94 0.008 250);
+  --acx-destructive: oklch(0.7 0.2 25);
+  --acx-destructive-fg: oklch(0.99 0 0);
+  --acx-border: oklch(0.28 0.022 258);
+  --acx-input: oklch(0.115 0.025 255);
+  --acx-input-border: oklch(0.28 0.022 258);
+  --acx-ring: oklch(0.65 0.19 258);
+  --acx-credit: oklch(0.72 0.15 152);
+  --acx-credit-fg: oklch(0.99 0 0);
+  --acx-debit: oklch(0.7 0.2 25);
+  --acx-debit-fg: oklch(0.99 0 0);
+  --acx-warning: oklch(0.78 0.15 75);
+  --acx-warning-fg: oklch(0.18 0.04 75);
+  --acx-bar: oklch(0.165 0.022 256);
+  --acx-bar-fg: oklch(0.72 0.012 250);
+}

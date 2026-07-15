@@ -1,0 +1,48 @@
+---
+title: Troubleshooting
+description: Fixes for common issues — SmartScreen warnings, a forgotten password, update problems, GST totals that don't reconcile, and performance on large books.
+category: Help
+order: 1
+---
+
+Most issues have a quick fix. If you're still stuck after this page, check the [FAQ](/docs/faq/) or email support@acronixbooks.com.
+
+## "Windows protected your PC" on install
+
+This SmartScreen prompt appears for newer apps whose code-signing reputation is still building. Click **More info → Run anyway**. See [Installation](/docs/installation/) for the full flow.
+
+## I forgot my password
+
+Use your **recovery code** to regain access, then set a new password.
+
+<Callout type="warn" title="No recovery code, no reset">
+Acronix Books encrypts your book locally, so there's no server-side password reset. If you have neither the password nor the recovery code, the local book cannot be decrypted. If you had [cloud sync](/docs/cloud-sync/) enabled with valid credentials, restore from cloud on a fresh setup.
+</Callout>
+
+## The app won't update
+
+- Confirm you have an internet connection and try **Settings → Updates → Check for updates**.
+- Restart the app to let a downloaded update apply.
+- If it still fails, download the latest installer from the [download page](/download/) and run it over your existing install — your data is preserved.
+
+## My GST totals don't reconcile
+
+- Make sure **every** invoice, credit note and debit note for the period is entered and dated in that period.
+- Check that each item has the correct **HSN code** and **tax category** — see [Tax setup](/docs/tax-setup/).
+- Compare the GSTR-1 taxable value with your P&L sales for the same dates; a gap usually points to a missing or mis-dated voucher. Full method in [GST filing](/docs/gst-filing/).
+
+## Tax is calculating as IGST when it should be CGST + SGST (or vice versa)
+
+This is driven by state. Check that your **company state** and the **party's state** are set correctly — same state means CGST + SGST, different states mean IGST.
+
+## The app feels slow on a large book
+
+Acronix Books virtualizes lists and is built to stay responsive past 50,000 vouchers per financial year. If you notice slowdown:
+
+- Narrow report date ranges to the period you actually need.
+- Make sure background sync isn't running during heavy data entry.
+- Confirm the machine meets the [system requirements](/docs/installation/).
+
+<Callout type="tip" title="When contacting support">
+Include your app version (**Settings → About**), your OS version, and the exact steps that trigger the problem. It gets you a faster, more accurate answer.
+</Callout>

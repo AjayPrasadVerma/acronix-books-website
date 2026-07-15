@@ -1,0 +1,105 @@
+---
+title: GST filing — GSTR-1 & GSTR-3B
+description: A step-by-step walkthrough of generating GSTR-1 and GSTR-3B in Acronix Books and exporting them to Excel for the GST portal.
+category: Compliance
+order: 2
+---
+
+Acronix Books turns the invoices you've already entered into filing-ready GST returns. Everything below lives in the dedicated **GST** module (press <code>F7</code>), which also holds the tax registers, the HSN summary, and e-invoice and e-way bill generation. This guide walks through the module end to end.
+
+<Callout type="info" title="Before you start">
+Make sure your [tax setup](/docs/tax-setup/) is complete — GSTIN, tax categories and HSN codes — and that all sales, purchases, credit notes and debit notes for the period are entered. The returns and registers are only as accurate as the vouchers behind them.
+</Callout>
+
+## Tax registers & HSN summary
+
+Before you generate a return, the registers let you check the underlying figures:
+
+| Register | What it shows |
+| --- | --- |
+| **Sales Register** | Every outward invoice for the period, with taxable value and tax |
+| **Purchase Register** | Every inward invoice, the basis for your input tax credit |
+| **Output Tax Register** | GST charged on sales, split by rate and CGST / SGST / IGST |
+| **Input Tax Register** | GST paid on purchases, i.e. the ITC you can claim |
+| **HSN Summary** | Rate-wise, HSN/SAC-wise consolidation that feeds the GSTR-1 HSN table |
+
+Reconciling against these registers first is the fastest way to catch a missing or mis-dated voucher before it reaches a return.
+
+## GSTR-1 — outward supplies
+
+GSTR-1 reports everything you **sold** in the period. Acronix Books builds it from your sales invoices, credit notes and debit notes.
+
+### Generate GSTR-1
+
+1. In the **GST** module, open **GSTR-1**.
+2. Select the **return period** (month or quarter).
+3. Click **Generate**. Acronix Books classifies every outward document into the correct GSTR-1 table:
+
+| Table | What it holds |
+| --- | --- |
+| **B2B** | Sales to registered parties (GSTIN present), invoice-wise |
+| **B2C (Large)** | Large inter-state sales to unregistered parties |
+| **B2C (Small)** | Consolidated small retail sales |
+| **CDNR / CDNUR** | Credit & debit notes (registered / unregistered) |
+| **HSN** | Rate-wise summary by HSN/SAC code |
+| **Docs** | Document issued summary (invoice number ranges) |
+
+4. Review the on-screen summary and the taxable value / tax totals.
+
+### Export and file GSTR-1
+
+1. Click **Export to Excel**. Acronix Books produces a spreadsheet laid out for the government **GSTR-1 offline utility**.
+2. Open the GST offline tool (or portal), import the Excel file, and generate the JSON.
+3. Upload the JSON on the GST portal, verify the summary, and submit.
+
+<Callout type="tip" title="Reconcile before you file">
+Cross-check the GSTR-1 taxable value against your Profit & Loss sales figure for the same period (see [Reports & exports](/docs/reports-and-exports/)). If they diverge, you've usually missed an invoice or mis-dated one.
+</Callout>
+
+## GSTR-3B — summary return
+
+GSTR-3B is the monthly **summary** of outward supplies, input tax credit (ITC) and net tax payable.
+
+### Generate GSTR-3B
+
+1. In the **GST** module, open **GSTR-3B**.
+2. Select the **return period**.
+3. Click **Generate**. Acronix Books compiles the summary tables:
+
+| Section | What it summarises |
+| --- | --- |
+| **3.1** | Outward taxable supplies (from your sales) |
+| **3.2** | Inter-state supplies to unregistered / composition parties |
+| **4** | Eligible input tax credit (from your purchases) |
+| **5** | Exempt, nil-rated and non-GST inward supplies |
+| **6.1** | Net tax payable after ITC |
+
+4. Review each section against your books.
+
+### Export and file GSTR-3B
+
+1. Click **Export to Excel** to get the summary workbook.
+2. Enter the summary values into the corresponding boxes on the GST portal's GSTR-3B form (3B is filed by summary values, not invoice upload).
+3. Offset liability with available ITC, pay any balance, and submit.
+
+## E-invoice & e-way bill
+
+For invoices that need them, Acronix Books prepares the e-invoice and e-way bill data straight from the voucher you already posted — no separate re-entry.
+
+- **E-invoice** — generates the invoice payload for the Invoice Registration Portal (IRP) so you can obtain the IRN and signed QR code.
+- **E-way bill** — assembles the transport details (transporter, distance, vehicle) into an e-way bill payload for goods in movement.
+
+<Callout type="info" title="Acronix Books prepares the data">
+As with the returns, Acronix Books builds the e-invoice and e-way bill data from your books; the IRN and EWB number are issued by the government portals. Keeping the source voucher accurate keeps every downstream document accurate.
+</Callout>
+
+## A sensible monthly rhythm
+
+1. Enter all vouchers for the month.
+2. Generate **GSTR-1**, reconcile, export and file.
+3. Generate **GSTR-3B**, confirm ITC against your purchase register, export and file.
+4. Take a [backup](/docs/backup-and-restore/) once the month is filed.
+
+<Callout type="warn" title="Acronix Books prepares — you file">
+Acronix Books generates the return data and export files. Actual submission happens on the GST portal / offline utility. Always review the figures with your accountant before submitting; you remain responsible for what you file.
+</Callout>

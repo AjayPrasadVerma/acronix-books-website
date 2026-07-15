@@ -1,0 +1,50 @@
+---
+title: Tax setup (GST)
+description: Configure your GSTIN, create tax categories and HSN codes, and understand how Acronix Books picks CGST + SGST vs IGST automatically.
+category: Compliance
+order: 1
+---
+
+Getting GST right starts with a few minutes of setup. Once configured, Acronix Books applies the correct tax to every invoice without you thinking about it.
+
+## Your GSTIN and state
+
+Set your **GSTIN** and **state** on the company (see [Creating your first company](/docs/creating-your-first-company/)). Your state is what determines the tax split on every sale:
+
+- **Intra-state** (customer in the same state) → **CGST + SGST**
+- **Inter-state** (customer in a different state) → **IGST**
+
+Acronix Books compares your state with the party's state on each invoice and applies the right combination automatically.
+
+## Tax categories and rates
+
+A **tax category** bundles a GST rate (for example 0%, 5%, 12%, 18%, 28%). Create the categories your goods and services fall under, then attach the right category to each item.
+
+| Item | HSN/SAC | Tax category |
+| --- | --- | --- |
+| Cotton fabric | 5208 | GST 5% |
+| Readymade garment (≤ ₹1000) | 6109 | GST 5% |
+| Consulting service | 9983 | GST 18% |
+
+## HSN / SAC codes
+
+Every item should carry its **HSN** (goods) or **SAC** (services) code. These codes:
+
+- Print on the tax invoice as required.
+- Roll up into the HSN summary of your **GSTR-1**.
+
+<Callout type="tip" title="Set it once on the item">
+Store the HSN code and tax category on the item master, not on each invoice. Every voucher then inherits them automatically, and your GSTR-1 HSN summary comes out clean.
+</Callout>
+
+## Rounding and cess
+
+Acronix Books handles per-line tax computation and invoice rounding consistently, so your invoice totals and your return summaries agree. Where a cess applies, add it to the relevant tax category.
+
+<Callout type="warn" title="Check your rates against current notifications">
+GST rates and HSN classifications change through CBIC notifications. Acronix Books applies whatever rate you configure — it's your responsibility (with your CA) to keep tax categories aligned with the current law.
+</Callout>
+
+## Next
+
+Ready to file? Walk through generating your returns in [GST filing](/docs/gst-filing/).

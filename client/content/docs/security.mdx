@@ -1,0 +1,71 @@
+---
+title: Security
+description: How Acronix Books protects your books — AES-256 encryption at rest, the envelope key vault and recovery code, encrypted login, idle auto-lock, the audit hash chain and RBAC.
+category: Data & security
+order: 3
+---
+
+Your financial records are sensitive, so security is built into Acronix Books at the foundation — not bolted on. This page explains what protects your data and what that means for you day to day.
+
+## Encryption at rest
+
+Your entire book is stored in a **SQLCipher** database encrypted with **AES-256**. On disk, the file is unreadable without the key — there is no plaintext copy of your ledgers, invoices or party data.
+
+## The envelope key vault
+
+Rather than encrypting your data directly with your password, Acronix Books uses an **envelope** scheme:
+
+- A strong random **data encryption key** protects the book.
+- That key is wrapped by a **key-encryption key (KEK)** derived from your password using **scrypt** (a deliberately slow, memory-hard function that resists brute force).
+- The vault supports **per-user key slots**, so multiple users can each unlock the same book with their own credentials.
+
+<Callout type="info" title="Why envelope encryption?">
+Because the data key is wrapped rather than derived directly from your password, you can change your password — or add another user — without re-encrypting the whole database. Only the small wrapped-key slot changes.
+</Callout>
+
+## Recovery code
+
+When you set up the app you're given a **recovery code**. It's an independent way to unwrap your key if you forget your password.
+
+<Callout type="warn" title="Guard the recovery code">
+There is no central server that can reset your password. If you lose both your password and your recovery code, your local book cannot be decrypted. Print or store the recovery code somewhere safe and offline.
+</Callout>
+
+## Encrypted login and idle auto-lock
+
+- **Encrypted login / unlock** gates access every time the app opens.
+- **Idle auto-lock** locks the app after a period of inactivity, so an unattended machine doesn't leave your books exposed. Lock instantly at any time from the app.
+
+## Audit trail
+
+The **Audit** module keeps a trustworthy record of activity:
+
+- **Audit log & hash chain** — each entry includes a SHA-256 hash of the previous one, so any attempt to alter or remove history breaks the chain and is detectable.
+- **Login log** — a record of sign-ins for the book.
+- **Voucher audit** — the trail of who created or changed which voucher, and when.
+- **Period lock** — freeze a filed period so vouchers in it can no longer be edited.
+
+## Role-based access control (RBAC)
+
+When more than one person uses the books, capability-based **RBAC** grants each user only the access their role needs. There are five role levels:
+
+| Role | Typical use |
+| --- | --- |
+| **Viewer** | Read-only access to reports and vouchers |
+| **Operator** | Day-to-day voucher entry |
+| **Accountant** | Vouchers plus masters and financial reports |
+| **Admin** | User management and configuration |
+| **Owner** | Full control, including the security setup |
+
+Access is checked by capability rather than a simple admin flag, so a data-entry operator can create vouchers without being able to change masters or view sensitive reports.
+
+## Encrypted backups
+
+Backups are created with SQLite's `VACUUM INTO` and written as encrypted `.acxb` files — they carry no plaintext, so a backup on an external drive or in the cloud stays as protected as your live book. See [Backup & restore](/docs/backup-and-restore/).
+
+## Your responsibilities
+
+- Choose a strong, unique password.
+- Store the recovery code safely and offline.
+- Keep the app updated — see [Updating the app](/docs/updating-the-app/).
+- Keep [backups](/docs/backup-and-restore/), ideally off-site.

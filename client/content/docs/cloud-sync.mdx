@@ -1,0 +1,39 @@
+---
+title: Cloud sync
+description: Turn on optional full-book cloud sync, understand the per-client isolated encrypted backup, and restore your book on a new device.
+category: Data & security
+order: 2
+---
+
+Cloud sync is an **optional** feature that backs up your entire book to your own isolated space in the cloud and lets you restore it on a new machine. Acronix Books is offline-first: everything works without it, and you turn it on only when you want it.
+
+## What cloud sync does
+
+- **Full-book sync** — your complete book is synced, not just a subset.
+- **Per-client isolation** — each client gets its own isolated, encrypted cloud backup, separate from every other client.
+- **Fresh-device restore** — sign in on a new computer and pull your entire book down.
+- **Offline-first** — you keep working with no internet; sync happens when you choose to connect.
+
+<Callout type="info" title="Optional and reversible">
+You don't need an internet connection to use Acronix Books. Cloud sync is something you opt into. Your local, encrypted book remains the source of truth on your machine.
+</Callout>
+
+## Turn on cloud sync
+
+1. Open **Settings → Cloud sync**.
+2. Sign in to enable sync for this book. Acronix Books provisions your isolated cloud backup automatically the first time.
+3. Choose when to sync — you control when your machine connects and pushes changes up.
+
+## Restore on a new device
+
+1. Install Acronix Books on the new computer — see [Installation](/docs/installation/).
+2. During onboarding, choose to **restore from cloud** and sign in.
+3. Acronix Books pulls your book down and opens it locally.
+
+<Callout type="tip" title="Moving to a new laptop">
+Cloud sync makes device migration painless: enable sync on the old machine, sync, then restore from cloud on the new one. No manual file copying, and the transfer stays encrypted end to end.
+</Callout>
+
+## Security of synced data
+
+Your book is encrypted before it leaves your machine, and each client's backup is isolated from others. See [Security](/docs/security/) for how encryption keys are derived and protected. For point-in-time archives you also control locally, combine cloud sync with [local backups](/docs/backup-and-restore/).

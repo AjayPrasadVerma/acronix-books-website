@@ -1,0 +1,50 @@
+---
+title: Frequently asked questions
+description: Quick answers about pricing, platforms, offline use, GST support, data security, migrating from Tally, and multi-user access in Acronix Books.
+category: Help
+order: 2
+---
+
+## Is Acronix Books really free?
+
+Yes. Acronix Books is free during early access (v0.1.0). There's no per-invoice charge and no feature paywall on the accounting, GST and inventory features.
+
+## Which platforms are supported?
+
+Windows 10 and 11 (64-bit) today. macOS and Linux builds are in the pipeline — leave your email on the [download page](/download/) to be notified at launch.
+
+## Does it work offline?
+
+Completely. Acronix Books is **offline-first** — every feature works with no internet connection. [Cloud sync](/docs/cloud-sync/) is optional and only used when you choose to connect.
+
+## Can it handle GST returns?
+
+Yes. A dedicated GST module gives you the Sales, Purchase, Output Tax and Input Tax registers, a rate-wise HSN summary, and **GSTR-1** and **GSTR-3B** exported to Excel for the GST portal / offline utility. It also prepares **e-invoice** and **e-way bill** data from the same vouchers. See the [GST filing walkthrough](/docs/gst-filing/).
+
+## How is my data protected?
+
+Your entire book is encrypted at rest with **AES-256** (SQLCipher), unlocked by a password-derived key with a recovery code as backup. There's an idle auto-lock, a tamper-evident audit log and role-based access control. Full detail in [Security](/docs/security/).
+
+## Can more than one person use the same book?
+
+Yes. The envelope key vault supports **per-user key slots**, and capability-based **RBAC** with five role levels — Viewer, Operator, Accountant, Admin and Owner — lets you give each user only the access their role needs.
+
+## Can I move from Tally to Acronix Books?
+
+Acronix Books uses the familiar Indian accounting model — ledgers, groups, vouchers and voucher series — so the concepts carry over directly. It's designed to feel faster and more modern than legacy tools while staying GST-ready. See our blog post on choosing a [Tally alternative for GST billing](/blog/best-tally-alternative-gst-billing-2026/).
+
+## How big a business can it handle?
+
+The app virtualizes lists and stays responsive past **50,000 vouchers per financial year**, with sub-200ms interactions — comfortable for growing businesses.
+
+## What happens to my data when the app updates?
+
+Nothing — updates replace the application, not your book. Your encrypted database stays in place. See [Updating the app](/docs/updating-the-app/).
+
+## How do I back up my data?
+
+Create encrypted local backups any time, and optionally enable cloud sync for continuous, isolated encrypted backup with fresh-device restore. See [Backup & restore](/docs/backup-and-restore/) and [Cloud sync](/docs/cloud-sync/).
+
+## Where do I get help?
+
+Start with [Troubleshooting](/docs/troubleshooting/). Still stuck? Email support@acronixbooks.com with your app and OS version and the steps to reproduce the issue.
