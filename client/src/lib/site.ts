@@ -268,8 +268,9 @@ const primary: NavEntry[] = [
     layout: 'columns',
     align: 'left',
     overviewHref: '/solutions/',
-    // Counts are DERIVED, never typed. We have 8 solutions and 7 industries —
-    // if a reader counts them, the number must match. See CLAUDE.md §9.
+    // Counts are DERIVED, never typed — if a reader counts the links, the
+    // number must match. Hardcoding it is how "7 industries" survives into a
+    // release that ships 15. See CLAUDE.md §9.
     overviewLabel: `See all ${solutions.length} solutions`,
     groups: solutionColumns,
   },
