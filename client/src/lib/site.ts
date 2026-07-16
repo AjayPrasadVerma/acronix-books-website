@@ -1,7 +1,21 @@
 // Single source of truth for site-wide constants. Keep the URLs here in sync
 // with apps/desktop/electron-builder.yml (`publish.url`) and docs/release.md.
 
-import { solutions } from './solutions';
+import type { LucideIcon } from 'lucide-react';
+import {
+  BookOpen,
+  BookText,
+  CircleHelp,
+  Download,
+  History,
+  Keyboard,
+  LifeBuoy,
+  Newspaper,
+  Rocket,
+  Settings2,
+  Wrench,
+} from 'lucide-react';
+import { solutionBySlug, solutionGroups, solutions, type Solution } from './solutions';
 import { industries } from './industries';
 
 export const site = {
@@ -135,78 +149,170 @@ export const downloads: Record<Exclude<Platform, 'unknown'>, DownloadTarget> = {
 export interface NavLink {
   label: string;
   href: string;
-  /** One-line summary. Shown in mega/list panels; omitted in the footer. */
+  /** One-line summary. Shown where the panel has room; omitted in the footer. */
   description?: string;
+  /** Panel glyph. A component reference, not a string — keeps it type-safe. */
+  icon?: LucideIcon;
+}
+
+/**
+ * A labelled column of links inside a menu panel. The uppercase `label` is what
+ * turns a flat list into something scannable — it is the whole point of v2.
+ */
+export interface NavGroup {
+  label: string;
+  links: NavLink[];
 }
 
 /**
  * A top-level nav entry. Either a plain link, or a menu that expands into a
  * panel on desktop and an accordion section on mobile.
- *   - `mega`: two-column grid with descriptions (Solutions, Industries).
- *   - `list`: compact single column with descriptions (Resources).
+ *   - `columns`: one column per group, divided by a rule (Solutions, GST,
+ *     Resources).
+ *   - `grid`: a single group laid out as a two-column icon grid (Industries).
  */
 export type NavEntry =
   | { kind: 'link'; label: string; href: string }
   | {
       kind: 'menu';
       label: string;
-      layout: 'mega' | 'list';
+      layout: 'columns' | 'grid';
+      /** Which edge of the trigger the panel hangs from. */
+      align: 'left' | 'right';
       /** The group's overview page — the "see all" link at the panel's foot. */
       overviewHref: string;
       overviewLabel: string;
-      links: NavLink[];
+      groups: NavGroup[];
     };
 
-const solutionLinks: NavLink[] = solutions.map((s) => ({
+/** Every link in a menu, flattened — for active-state and mobile rendering. */
+export const menuLinks = (entry: Extract<NavEntry, { kind: 'menu' }>): NavLink[] =>
+  entry.groups.flatMap((g) => g.links);
+
+const solutionLink = (s: Solution, withDescription = true): NavLink => ({
   label: s.name,
   href: `/solutions/${s.slug}/`,
-  description: s.tagline,
-}));
+  icon: s.icon,
+  ...(withDescription ? { description: s.tagline } : {}),
+});
 
 const industryLinks: NavLink[] = industries.map((i) => ({
   label: i.name,
   href: `/industries/${i.slug}/`,
   description: i.tagline,
+  icon: i.icon,
 }));
+
+/** Derived from `solutionGroups` — a regrouping in the data reshapes the panel. */
+const solutionColumns: NavGroup[] = solutionGroups.map((group) => ({
+  label: group,
+  links: solutions.filter((s) => s.group === group).map((s) => solutionLink(s)),
+}));
+
+/**
+ * The GST panel links ONLY to pages that already exist — the four GST-facing
+ * solution pages and the two GST docs. We deliberately do not publish rate/HSN/
+ * penalty reference tables: those are tax-compliance claims we cannot stand
+ * behind, and a wrong one costs a reader real money.
+ */
+const gstSolutionSlugs = ['gst-billing', 'e-invoice', 'e-way-bill', 'gst-returns'];
+
+const gstColumns: NavGroup[] = [
+  {
+    label: 'In Acronix',
+    links: gstSolutionSlugs.flatMap((slug) => {
+      const s = solutionBySlug.get(slug);
+      return s ? [solutionLink(s, false)] : [];
+    }),
+  },
+  {
+    label: 'Guides',
+    links: [
+      { label: 'GST filing', href: '/docs/gst-filing/', icon: BookText },
+      { label: 'Tax setup', href: '/docs/tax-setup/', icon: Settings2 },
+    ],
+  },
+];
+
+const resourceColumns: NavGroup[] = [
+  {
+    label: 'Documentation',
+    links: [
+      { label: 'All docs', href: '/docs/', icon: BookOpen },
+      { label: 'Getting started', href: '/docs/getting-started/', icon: Rocket },
+      { label: 'Keyboard shortcuts', href: '/docs/keyboard-shortcuts/', icon: Keyboard },
+    ],
+  },
+  {
+    label: 'Support',
+    links: [
+      { label: 'Help & support', href: '/support/', icon: LifeBuoy },
+      { label: 'FAQ', href: '/docs/faq/', icon: CircleHelp },
+      { label: 'Troubleshooting', href: '/docs/troubleshooting/', icon: Wrench },
+    ],
+  },
+  {
+    label: 'Product',
+    links: [
+      { label: 'Changelog', href: '/changelog/', icon: History },
+      { label: 'Blog', href: '/blog/', icon: Newspaper },
+      { label: 'Download', href: '/download/', icon: Download },
+    ],
+  },
+];
 
 const primary: NavEntry[] = [
   {
     kind: 'menu',
     label: 'Solutions',
-    layout: 'mega',
+    layout: 'columns',
+    align: 'left',
     overviewHref: '/solutions/',
-    overviewLabel: 'See all solutions',
-    links: solutionLinks,
+    // Counts are DERIVED, never typed. We have 8 solutions and 7 industries —
+    // if a reader counts them, the number must match. See CLAUDE.md §9.
+    overviewLabel: `See all ${solutions.length} solutions`,
+    groups: solutionColumns,
   },
   {
     kind: 'menu',
     label: 'Industries',
-    layout: 'mega',
+    layout: 'grid',
+    align: 'left',
     overviewHref: '/industries/',
-    overviewLabel: 'See all industries',
-    links: industryLinks,
+    overviewLabel: `See all ${industries.length} industries`,
+    groups: [{ label: 'By industry', links: industryLinks }],
+  },
+  {
+    kind: 'menu',
+    label: 'GST',
+    layout: 'columns',
+    align: 'left',
+    overviewHref: '/solutions/gst-billing/',
+    overviewLabel: 'GST billing & invoicing',
+    groups: gstColumns,
   },
   { kind: 'link', label: 'Pricing', href: '/pricing/' },
-  { kind: 'link', label: 'Docs', href: '/docs/' },
   {
     kind: 'menu',
     label: 'Resources',
-    layout: 'list',
+    layout: 'columns',
+    align: 'right',
     overviewHref: '/docs/',
     overviewLabel: 'Browse the documentation',
-    links: [
-      { label: 'Documentation', href: '/docs/', description: 'Guides, reference and how-tos' },
-      { label: 'Blog', href: '/blog/', description: 'Product notes and deep dives' },
-      { label: 'Changelog', href: '/changelog/', description: 'What shipped, release by release' },
-      { label: 'Support', href: '/support/', description: 'Reach the team for help' },
-    ],
+    groups: resourceColumns,
   },
 ];
 
 /** Footer columns. Keyed by heading; Solutions/Industries reuse the nav data. */
 const footer: Record<string, NavLink[]> = {
-  Solutions: [...solutionLinks.map((l) => ({ label: l.label, href: l.href })), { label: 'All solutions', href: '/solutions/' }],
-  Industries: [...industryLinks.map((l) => ({ label: l.label, href: l.href })), { label: 'All industries', href: '/industries/' }],
+  Solutions: [
+    ...solutions.map((s) => ({ label: s.name, href: `/solutions/${s.slug}/` })),
+    { label: 'All solutions', href: '/solutions/' },
+  ],
+  Industries: [
+    ...industries.map((i) => ({ label: i.name, href: `/industries/${i.slug}/` })),
+    { label: 'All industries', href: '/industries/' },
+  ],
   Product: [
     { label: 'Features', href: '/features/' },
     { label: 'Pricing', href: '/pricing/' },
@@ -217,14 +323,19 @@ const footer: Record<string, NavLink[]> = {
   Resources: [
     { label: 'Documentation', href: '/docs/' },
     { label: 'Getting started', href: '/docs/getting-started/' },
+    { label: 'Installation', href: '/docs/installation/' },
+    { label: 'Keyboard shortcuts', href: '/docs/keyboard-shortcuts/' },
     { label: 'GST filing', href: '/docs/gst-filing/' },
+    { label: 'Backup & restore', href: '/docs/backup-and-restore/' },
     { label: 'Blog', href: '/blog/' },
   ],
   Company: [
     { label: 'About', href: '/about/' },
     { label: 'Security', href: '/security/' },
     { label: 'Help & Support', href: '/support/' },
-    { label: 'Contact', href: 'mailto:support@acronixbooks.com' },
+    { label: 'FAQ', href: '/docs/faq/' },
+    { label: 'Troubleshooting', href: '/docs/troubleshooting/' },
+    { label: 'Contact', href: `mailto:${company.supportEmail}` },
   ],
   Legal: [
     { label: 'Privacy Policy', href: '/privacy/' },

@@ -11,6 +11,17 @@
 // If a vertical has no specific support, say so (see `ecommerce`, `education`)
 // rather than implying a module that does not exist.
 
+import type { LucideIcon } from 'lucide-react';
+import {
+  Briefcase,
+  Factory,
+  GraduationCap,
+  Shirt,
+  ShoppingCart,
+  Store,
+  Truck,
+} from 'lucide-react';
+
 export interface IndustryChallenge {
   title: string;
   body: string;
@@ -28,6 +39,8 @@ export interface Industry {
   name: string;
   /** One-line summary used in the nav panel and cards. */
   tagline: string;
+  /** Nav/card glyph. A component reference, not a string — keeps it type-safe. */
+  icon: LucideIcon;
   /** <title> — page-specific, not templated boilerplate. */
   title: string;
   /** <meta name="description"> */
@@ -55,6 +68,7 @@ export const industries: Industry[] = [
     slug: 'textile',
     name: 'Textile & Fabric',
     tagline: 'Job work, greige tracking and processor exposure',
+    icon: Shirt,
     title: 'Accounting Software for Textile & Fabric Traders',
     description:
       'Acronix Books handles the way textile actually works — greige sent out for processing, stock sitting at a job worker, delivery challans without a sale, and §143 exposure you can prove. GST-ready, offline-first.',
@@ -119,6 +133,7 @@ export const industries: Industry[] = [
     slug: 'wholesale',
     name: 'Wholesale & Distribution',
     tagline: 'Bill-by-bill outstanding, credit limits, fast billing',
+    icon: Truck,
     title: 'Accounting Software for Wholesalers & Distributors',
     description:
       'Bill-by-bill outstanding from day one, per-party credit limits and credit days, multi-warehouse stock, e-way bills and keyboard-speed billing. Offline-first, so a dropped connection never stops a dispatch.',
@@ -183,6 +198,7 @@ export const industries: Industry[] = [
     slug: 'manufacturing',
     name: 'Manufacturing',
     tagline: 'Consumption, production and true cost of goods',
+    icon: Factory,
     title: 'Accounting Software for Manufacturers',
     description:
       'Two-legged stock journals for consumption and production, job work tracking, FIFO or weighted-average valuation per item, perpetual inventory and COGS. GST-ready and offline-first.',
@@ -249,6 +265,7 @@ export const industries: Industry[] = [
     slug: 'retail',
     name: 'Retail',
     tagline: 'Counter-speed billing that never waits for the internet',
+    icon: Store,
     title: 'Accounting & GST Billing Software for Retail Shops',
     description:
       'Keyboard-speed GST billing, live stock, day book and cash/bank position — running offline on the shop computer, with your books encrypted on your own machine.',
@@ -313,6 +330,7 @@ export const industries: Industry[] = [
     slug: 'services',
     name: 'Services',
     tagline: 'GST on services without inventory getting in the way',
+    icon: Briefcase,
     title: 'Accounting Software for Service Businesses',
     description:
       'Service billing, receivables and the full GST suite without an inventory module you never asked for. Offline-first, encrypted, and keyboard-driven.',
@@ -369,6 +387,7 @@ export const industries: Industry[] = [
     slug: 'ecommerce',
     name: 'E-commerce',
     tagline: 'GST-clean books behind your online selling',
+    icon: ShoppingCart,
     title: 'Accounting Software for E-commerce Sellers',
     description:
       'Keep GST-compliant, audit-ready books behind your online sales — inventory, HSN-wise summaries, GSTR-1 and GSTR-3B, encrypted locally. Marketplace settlement reconciliation is not included.',
@@ -416,6 +435,7 @@ export const industries: Industry[] = [
     slug: 'education',
     name: 'Education',
     tagline: 'Fees, expenses and audit-ready books for a school',
+    icon: GraduationCap,
     title: 'Accounting Software for Schools & Institutes',
     description:
       'Run a school or institute’s books on a proper double-entry ledger — fee receipts, expense heads, bill-by-bill outstanding, role-based access and audit trail. No student-information or fee-management module.',

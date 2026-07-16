@@ -9,12 +9,41 @@
 // `cloud-sync`, where the server-side mirror is deliberately NOT end-to-end
 // encrypted (product CLAUDE.md §15.13). Never let copy imply otherwise.
 
+import type { LucideIcon } from 'lucide-react';
+import {
+  BarChart3,
+  BookOpen,
+  Boxes,
+  CloudUpload,
+  FileCheck,
+  FileSpreadsheet,
+  ReceiptIndianRupee,
+  Truck,
+} from 'lucide-react';
+
+/**
+ * The nav groups a solution can belong to. The mega-menu derives its columns by
+ * mapping over this tuple — so a new group is added here, never hand-listed in
+ * the component. Order here IS the column order on screen.
+ */
+export const solutionGroups = [
+  'Accounting & billing',
+  'GST compliance',
+  'Inventory & reports',
+] as const;
+
+export type SolutionGroup = (typeof solutionGroups)[number];
+
 export interface Solution {
   slug: string;
   /** Menu + card label. */
   name: string;
   /** One-liner for the nav panel and cards. */
   tagline: string;
+  /** Nav/card glyph. A component reference, not a string — keeps it type-safe. */
+  icon: LucideIcon;
+  /** Which mega-menu column this solution sits under. */
+  group: SolutionGroup;
   title: string;
   description: string;
   headline: string;
@@ -31,6 +60,8 @@ export const solutions: Solution[] = [
     slug: 'gst-billing',
     name: 'GST Billing & Invoicing',
     tagline: 'Compliant invoices at keyboard speed',
+    icon: ReceiptIndianRupee,
+    group: 'Accounting & billing',
     title: 'GST Billing & Invoicing Software',
     description:
       'Raise GST-compliant invoices in seconds — CGST/SGST/IGST resolved from place of supply, HSN and rates carried on the item master, tax-invoice print and e-invoice from the same voucher.',
@@ -84,6 +115,8 @@ export const solutions: Solution[] = [
     slug: 'inventory',
     name: 'Inventory & Stock',
     tagline: 'Multi-warehouse stock with real valuation',
+    icon: Boxes,
+    group: 'Inventory & reports',
     title: 'Inventory Management Software',
     description:
       'Multi-warehouse stock, FIFO or weighted-average valuation per item, stock journals, delivery challans and party-held stock — with movements and valuation layers behind every number.',
@@ -139,6 +172,8 @@ export const solutions: Solution[] = [
     slug: 'accounting',
     name: 'Accounting & Vouchers',
     tagline: 'One posting engine, one ledger, real double entry',
+    icon: BookOpen,
+    group: 'Accounting & billing',
     title: 'Double-Entry Accounting & Voucher Software',
     description:
       'Every voucher posts through one shared engine into one canonical ledger — sales, purchases, receipts, payments, contra, journals, credit and debit notes. Immutable postings, period lock and a tamper-evident audit log.',
@@ -192,6 +227,8 @@ export const solutions: Solution[] = [
     slug: 'e-invoice',
     name: 'E-Invoice (IRN)',
     tagline: 'IRP payloads from the voucher you already raised',
+    icon: FileCheck,
+    group: 'GST compliance',
     title: 'E-Invoice (IRN) Software',
     description:
       'Generate IRP-schema e-invoice payloads directly from your sales vouchers, and import the signed response back onto the invoice — with validation before you ever hit the portal.',
@@ -239,6 +276,8 @@ export const solutions: Solution[] = [
     slug: 'e-way-bill',
     name: 'E-Way Bill',
     tagline: 'EWB payloads straight from the movement',
+    icon: Truck,
+    group: 'GST compliance',
     title: 'E-Way Bill Software',
     description:
       'Build e-way bill payloads from the voucher that created the movement, with transport details, distance and validation — then import the response back onto the record.',
@@ -286,6 +325,8 @@ export const solutions: Solution[] = [
     slug: 'gst-returns',
     name: 'GSTR-1 & GSTR-3B',
     tagline: 'Returns that fall out of the vouchers you raised',
+    icon: FileSpreadsheet,
+    group: 'GST compliance',
     title: 'GSTR-1 & GSTR-3B Return Filing Software',
     description:
       'GSTR-1 and GSTR-3B generated from your own vouchers, with HSN summaries, tax registers and portal-shaped Excel exports — plus overrides where the return genuinely needs judgement.',
@@ -337,6 +378,8 @@ export const solutions: Solution[] = [
     slug: 'reports',
     name: 'Reports & Analytics',
     tagline: 'Twenty reports that stay instant at scale',
+    icon: BarChart3,
+    group: 'Inventory & reports',
     title: 'Accounting Reports & Analytics',
     description:
       'Trial Balance, P&L, Balance Sheet, Cash Flow, Day Book, Stock Summary, ageing and the GST registers — aggregated in SQL, exportable to PDF and Excel, fast at 500k vouchers.',
@@ -386,6 +429,8 @@ export const solutions: Solution[] = [
     slug: 'cloud-sync',
     name: 'Cloud Backup & Sync',
     tagline: 'Optional off-site backup and multi-device restore',
+    icon: CloudUpload,
+    group: 'Inventory & reports',
     title: 'Cloud Backup & Sync',
     description:
       'Optional encrypted-in-transit cloud backup with multi-device restore and email-OTP device enrolment. Your local book stays encrypted on your machine; the app works fully offline without an account.',

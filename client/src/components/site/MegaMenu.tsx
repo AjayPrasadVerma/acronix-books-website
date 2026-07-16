@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import type { FocusEvent, KeyboardEvent } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
-import { nav, type NavEntry, type NavLink } from '@/lib/site';
+import { menuLinks, nav, type NavEntry, type NavGroup, type NavLink } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 type MenuEntry = Extract<NavEntry, { kind: 'menu' }>;
@@ -15,29 +15,51 @@ interface NavProps {
 }
 
 const menuIsActive = (entry: MenuEntry, isActive: (href: string) => boolean) =>
-  isActive(entry.overviewHref) || entry.links.some((l) => isActive(l.href));
+  isActive(entry.overviewHref) || menuLinks(entry).some((l) => isActive(l.href));
 
 const panelId = (label: string) => `mega-panel-${label.toLowerCase().replace(/\s+/g, '-')}`;
 
 /* ------------------------------------------------------------------ *
- * Shared leaf renderer — used by both desktop panels and mobile sections
- * so the label/description markup lives in exactly one place.
+ * Shared leaf renderer — used by every desktop panel AND the mobile
+ * accordion, so the icon/label/description markup lives in exactly one
+ * place. A per-menu copy of this would be the DRY failure this file exists
+ * to avoid.
  * ------------------------------------------------------------------ */
 function PanelLink({ link }: { link: NavLink }) {
+  const Icon = link.icon;
   return (
     <Link
       href={link.href}
-      className="group/link block rounded-lg px-3 py-2.5 transition-colors hover:bg-[var(--bg-subtle)] focus-visible:bg-[var(--bg-subtle)]"
+      className="group/link flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-[var(--bg-subtle)] focus-visible:bg-[var(--bg-subtle)]"
     >
-      <span className="block text-sm font-semibold text-[var(--fg)] transition-colors group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400">
-        {link.label}
-      </span>
-      {link.description && (
-        <span className="mt-0.5 block text-xs leading-snug text-[var(--fg-muted)]">
-          {link.description}
+      {Icon && (
+        <span
+          className="mt-px inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-subtle)] text-[var(--fg-muted)] transition-colors group-hover/link:border-brand-600/30 group-hover/link:text-brand-600 dark:group-hover/link:border-brand-400/30 dark:group-hover/link:text-brand-400"
+          aria-hidden
+        >
+          <Icon className="h-4 w-4" />
         </span>
       )}
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-semibold text-[var(--fg)] transition-colors group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400">
+          {link.label}
+        </span>
+        {link.description && (
+          <span className="mt-0.5 block text-xs leading-snug text-[var(--fg-muted)]">
+            {link.description}
+          </span>
+        )}
+      </span>
     </Link>
+  );
+}
+
+/** The small uppercase label that turns a list into a section. */
+function GroupLabel({ children }: { children: string }) {
+  return (
+    <p className="px-2.5 pb-1 text-[0.6875rem] font-semibold uppercase tracking-wider text-[var(--fg-muted)]">
+      {children}
+    </p>
   );
 }
 
@@ -45,7 +67,7 @@ function OverviewLink({ entry }: { entry: MenuEntry }) {
   return (
     <Link
       href={entry.overviewHref}
-      className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-brand-600 transition-colors hover:bg-[var(--bg-subtle)] dark:text-brand-400"
+      className="flex items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-sm font-semibold text-brand-600 transition-colors hover:bg-[var(--bg-subtle)] dark:text-brand-400"
     >
       {entry.overviewLabel}
       <ArrowRight className="h-4 w-4" aria-hidden />
@@ -54,28 +76,63 @@ function OverviewLink({ entry }: { entry: MenuEntry }) {
 }
 
 /* ------------------------------------------------------------------ *
- * Desktop
+ * Desktop panels
  * ------------------------------------------------------------------ */
-function MenuPanel({ entry }: { entry: MenuEntry }) {
+
+/** Literal classes — Tailwind can't see a computed `grid-cols-${n}`. */
+function columnsClass(count: number): string {
+  if (count >= 3) return 'sm:grid-cols-3';
+  if (count === 2) return 'sm:grid-cols-2';
+  return 'grid-cols-1';
+}
+
+function GroupColumn({ group, itemsClass }: { group: NavGroup; itemsClass?: string }) {
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-2 shadow-xl shadow-ink-950/10 ring-1 ring-black/5 dark:ring-white/5">
-      <ul
-        className={cn(
-          'grid gap-0.5',
-          entry.layout === 'mega' ? 'sm:grid-cols-2' : 'grid-cols-1',
-        )}
-      >
-        {entry.links.map((link) => (
+    <div className="px-1.5 first:pl-0 last:pr-0">
+      <GroupLabel>{group.label}</GroupLabel>
+      <ul className={cn('grid gap-0.5', itemsClass)}>
+        {group.links.map((link) => (
           <li key={link.href}>
             <PanelLink link={link} />
           </li>
         ))}
       </ul>
-      <div className="mt-1 border-t border-[var(--border)] pt-1">
+    </div>
+  );
+}
+
+function MenuPanel({ entry }: { entry: MenuEntry }) {
+  const isGrid = entry.layout === 'grid';
+  return (
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-3 shadow-xl shadow-ink-950/10 ring-1 ring-black/5 dark:ring-white/5">
+      <div
+        className={cn(
+          'grid',
+          isGrid
+            ? 'grid-cols-1'
+            : cn('gap-0 divide-x divide-[var(--border)]', columnsClass(entry.groups.length)),
+        )}
+      >
+        {entry.groups.map((group) => (
+          <GroupColumn
+            key={group.label}
+            group={group}
+            itemsClass={isGrid ? 'sm:grid-cols-2' : undefined}
+          />
+        ))}
+      </div>
+      <div className="mt-2 border-t border-[var(--border)] pt-1.5">
         <OverviewLink entry={entry} />
       </div>
     </div>
   );
+}
+
+function panelPosition(entry: MenuEntry): string {
+  const edge = entry.align === 'right' ? 'right-0' : 'left-0';
+  if (entry.layout === 'grid') return cn(edge, 'w-[min(92vw,38rem)]');
+  if (entry.groups.length >= 3) return cn(edge, 'w-[min(94vw,50rem)]');
+  return cn(edge, 'w-[min(92vw,32rem)]');
 }
 
 function DesktopMenuItem({
@@ -194,12 +251,7 @@ function DesktopMenuItem({
       </button>
 
       {open && (
-        <div
-          className={cn(
-            'absolute top-full z-50 pt-2',
-            entry.layout === 'mega' ? 'left-0 w-[min(92vw,40rem)]' : 'right-0 w-72',
-          )}
-        >
+        <div className={cn('absolute top-full z-50 pt-2', panelPosition(entry))}>
           <div id={id} ref={panelRef} aria-label={entry.label} onKeyDown={onPanelKeyDown}>
             <MenuPanel entry={entry} />
           </div>
@@ -291,8 +343,13 @@ function MobileSection({
       </button>
       {open && (
         <div id={id} className="mb-1 ml-2 border-l border-[var(--border)] pl-2">
-          {entry.links.map((link) => (
-            <PanelLink key={link.href} link={link} />
+          {entry.groups.map((group) => (
+            <div key={group.label} className="pt-1.5 first:pt-0">
+              <GroupLabel>{group.label}</GroupLabel>
+              {group.links.map((link) => (
+                <PanelLink key={link.href} link={link} />
+              ))}
+            </div>
           ))}
           <OverviewLink entry={entry} />
         </div>
