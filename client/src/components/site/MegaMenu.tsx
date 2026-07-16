@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { FocusEvent, KeyboardEvent } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
@@ -332,6 +333,12 @@ function DesktopMenuItem({
 export function DesktopNav({ isActive }: NavProps) {
   const [openLabel, setOpenLabel] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Close on navigation. Clicking a link INSIDE the panel is not an outside
+  // click, and client-side routing never unmounts this component — so without
+  // this the panel stayed open on top of the page it had just navigated to.
+  useEffect(() => setOpenLabel(null), [pathname]);
 
   useEffect(() => {
     if (!openLabel) return;
@@ -433,6 +440,13 @@ function MobileSection({
 
 export function MobileNav({ isActive }: NavProps) {
   const [openLabel, setOpenLabel] = useState<string | null>(null);
+  const pathname = usePathname();
+
+  // The Header closes the drawer on navigate, but this accordion's own state
+  // survives — reopening the drawer would otherwise show the section you were
+  // last in, still expanded, from the previous page.
+  useEffect(() => setOpenLabel(null), [pathname]);
+
   return (
     <div className="flex flex-col gap-1">
       {nav.primary.map((entry) =>
