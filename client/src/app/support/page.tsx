@@ -141,7 +141,7 @@ const FAQS: FaqItem[] = [
   },
   {
     question: 'Is there phone support?',
-    answer: `Support is handled over email so we have the details we need — your app version, OS, and the steps that led to the issue — to give you an accurate answer. Write to ${company.supportEmail} and we'll reply ${company.responseTime}.`,
+    answer: `Yes — call ${company.supportPhone.display}. For anything touching your data, send an email to ${company.supportEmail} as well: your app version, OS and the steps that led to the issue in writing are what let us give an accurate answer instead of a guess. We reply ${company.responseTime}.`,
   },
   {
     question: 'How do I report a bug or request a feature?',
@@ -162,9 +162,10 @@ const jsonLd = {
     contactPoint: {
       '@type': 'ContactPoint',
       email: company.supportEmail,
+      telephone: company.supportPhone.tel,
       contactType: 'customer support',
       areaServed: 'IN',
-      availableLanguage: ['en'],
+      availableLanguage: ['en', 'hi'],
     },
   },
 };
@@ -221,16 +222,22 @@ export default function SupportPage() {
             <span className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-200 bg-white text-brand-600 dark:border-brand-400/25 dark:bg-ink-900 dark:text-brand-400">
               <LifeBuoy className="h-6 w-6" aria-hidden="true" />
             </span>
-            <p className="text-sm font-medium text-[var(--fg-muted)]">Email our support team</p>
+            <p className="text-sm font-medium text-[var(--fg-muted)]">Talk to our support team</p>
+            <a
+              href={`tel:${company.supportPhone.tel}`}
+              className="font-display text-xl font-bold tabular-nums text-brand-700 underline-offset-4 hover:underline dark:text-brand-300 sm:text-2xl"
+            >
+              {company.supportPhone.display}
+            </a>
             <a
               href={`mailto:${company.supportEmail}`}
-              className="font-display text-xl font-bold text-brand-700 underline-offset-4 hover:underline dark:text-brand-300 sm:text-2xl"
+              className="text-base font-semibold text-[var(--fg)] underline-offset-4 hover:underline"
             >
               {company.supportEmail}
             </a>
             <Badge tone="neutral" className="mt-1">
               <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-              Replies {company.responseTime}
+              Email replies {company.responseTime}
             </Badge>
           </div>
         </Container>

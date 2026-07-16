@@ -3,6 +3,7 @@ import {
   ArrowUpCircle,
   Boxes,
   Bug,
+  ChevronRight,
   Cloud,
   Compass,
   Download,
@@ -19,7 +20,7 @@ import type { LucideIcon } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Badge, Eyebrow } from '@/components/ui/Primitives';
 import { ButtonLink } from '@/components/ui/Button';
-import { getReleases } from '@/lib/content';
+import { getReleases, type ReleaseNote } from '@/lib/content';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -63,6 +64,93 @@ function channel(version: string): 'early-access' | 'beta' {
   return version.startsWith('0.0') ? 'beta' : 'early-access';
 }
 
+/**
+ * One release. The current one renders open; the rest collapse behind a
+ * <details> so fifty releases stay a readable index rather than an endless
+ * scroll. `open` on the latest is a plain attribute, not state — this is a
+ * server component and it must stay one.
+ */
+function ReleaseEntry({ release, isLatest }: { release: ReleaseNote; isLatest: boolean }) {
+  const ch = channel(release.version);
+  return (
+    <details
+      open={isLatest}
+      className="group/rel overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] open:bg-[var(--bg)]"
+    >
+      <summary className="flex cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-2 px-5 py-4 transition-colors hover:bg-[var(--bg-subtle)] focus-visible:bg-[var(--bg-subtle)] [&::-webkit-details-marker]:hidden">
+        <ChevronRight
+          className="h-4 w-4 shrink-0 text-[var(--fg-subtle)] transition-transform group-open/rel:rotate-90"
+          aria-hidden
+        />
+        <h2 className="font-display text-lg font-bold tracking-tight text-[var(--fg)]">
+          v{release.version}
+        </h2>
+        {isLatest && <Badge tone="brand">Latest</Badge>}
+        {ch === 'early-access' ? (
+          <Badge tone="accent">Early access</Badge>
+        ) : (
+          <Badge tone="neutral">Pre-release</Badge>
+        )}
+        <time
+          dateTime={release.date}
+          className="ml-auto font-mono text-xs font-medium text-[var(--fg-subtle)]"
+        >
+          {formatDate(release.date)}
+        </time>
+      </summary>
+
+      <div className="border-t border-[var(--border)] px-5 pb-6 pt-5">
+        <p className="max-w-2xl leading-relaxed text-[var(--fg-muted)]">{release.summary}</p>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {release.sections.map((section) => {
+            const Icon = sectionIcon(section.title);
+            return (
+              <div
+                key={section.title}
+                className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5"
+              >
+                <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--fg)]">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-400/10 dark:text-brand-400">
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </span>
+                  {section.title}
+                </h3>
+                <ul className="mt-3 flex flex-col gap-2.5">
+                  {section.items.map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="flex gap-2.5 text-sm leading-relaxed text-[var(--fg-muted)]"
+                    >
+                      <span
+                        aria-hidden
+                        className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </details>
+  );
+}
+
+/** Releases bucketed by calendar year, newest year first — the index's shape. */
+function groupByYear(list: ReleaseNote[]): [string, ReleaseNote[]][] {
+  const byYear = new Map<string, ReleaseNote[]>();
+  for (const r of list) {
+    const year = r.date.slice(0, 4);
+    const bucket = byYear.get(year);
+    if (bucket) bucket.push(r);
+    else byYear.set(year, [r]);
+  }
+  return [...byYear.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+}
+
 const ROADMAP: { icon: LucideIcon; title: string; body: string }[] = [
   {
     icon: Landmark,
@@ -98,6 +186,7 @@ const changelogJsonLd = {
 
 export default function ChangelogPage() {
   const releases = getReleases();
+  const releasesByYear = groupByYear(releases);
 
   return (
     <div className="pb-24">
@@ -134,79 +223,65 @@ export default function ChangelogPage() {
         </Container>
       </section>
 
-      {/* Timeline */}
-      <Container size="narrow" className="pt-16">
-        <ol className="relative flex flex-col gap-16 border-l border-[var(--border)] pl-6 sm:pl-10">
-          {releases.map((release, i) => {
-            const isLatest = i === 0;
-            const ch = channel(release.version);
-            return (
-              <li key={release.version} id={`v${release.version}`} className="relative scroll-mt-24">
-                <span
-                  aria-hidden
-                  className={cnDot(isLatest)}
-                />
+      {/* Version index + releases.
+          Every release used to render fully expanded down one timeline. That
+          reads fine at three releases and becomes unusable at fifty: tens of
+          thousands of words on a single page with no way to reach a version.
+          So: a sticky index on the left, the current release open, and every
+          older one collapsed behind <details>.
 
-                {/* Release header */}
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <h2 className="font-display text-2xl font-bold tracking-tight text-[var(--fg)]">
-                    v{release.version}
-                  </h2>
-                  {isLatest && <Badge tone="brand">Latest</Badge>}
-                  {ch === 'early-access' ? (
-                    <Badge tone="accent">Early access</Badge>
-                  ) : (
-                    <Badge tone="neutral">Pre-release</Badge>
-                  )}
-                  <time
-                    dateTime={release.date}
-                    className="ml-auto font-mono text-xs font-medium text-[var(--fg-subtle)]"
-                  >
-                    {formatDate(release.date)}
-                  </time>
-                </div>
+          <details> rather than a JS accordion on purpose — the content stays in
+          the DOM, so it is crawlable and Ctrl+F-able, and it works before
+          hydration. This page is a server component; that stays true. */}
+      <Container size="wide" className="pt-16">
+        <div className="lg:grid lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-12">
+          {/* Index */}
+          <aside className="mb-10 lg:mb-0">
+            <div className="lg:sticky lg:top-24">
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-wider text-[var(--fg-muted)]">
+                All versions
+              </p>
+              <nav aria-label="Release versions" className="mt-3">
+                {releasesByYear.map(([year, group]) => (
+                  <div key={year} className="mb-4 last:mb-0">
+                    <p className="px-2 py-1 font-mono text-xs font-semibold text-[var(--fg-subtle)]">
+                      {year}
+                    </p>
+                    <ul className="mt-0.5 border-l border-[var(--border)]">
+                      {group.map((r) => (
+                        <li key={r.version}>
+                          <a
+                            href={`#v${r.version}`}
+                            className="-ml-px flex items-center justify-between gap-2 border-l-2 border-transparent px-2.5 py-1.5 text-sm text-[var(--fg-muted)] transition-colors hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400"
+                          >
+                            <span className="font-mono font-medium">v{r.version}</span>
+                            {r.version === releases[0]?.version && (
+                              <span className="text-[0.625rem] font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
+                                Latest
+                              </span>
+                            )}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </nav>
+            </div>
+          </aside>
 
-                <p className="mt-3 max-w-2xl leading-relaxed text-[var(--fg-muted)]">
-                  {release.summary}
-                </p>
-
-                {/* Grouped changes */}
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  {release.sections.map((section) => {
-                    const Icon = sectionIcon(section.title);
-                    return (
-                      <div
-                        key={section.title}
-                        className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5"
-                      >
-                        <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--fg)]">
-                          <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-400/10 dark:text-brand-400">
-                            <Icon className="h-4 w-4" aria-hidden />
-                          </span>
-                          {section.title}
-                        </h3>
-                        <ul className="mt-3 flex flex-col gap-2.5">
-                          {section.items.map((item, idx) => (
-                            <li
-                              key={idx}
-                              className="flex gap-2.5 text-sm leading-relaxed text-[var(--fg-muted)]"
-                            >
-                              <span
-                                aria-hidden
-                                className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400"
-                              />
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    );
-                  })}
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+          {/* Releases */}
+          <ol className="flex min-w-0 flex-col gap-4">
+            {releases.map((release, i) => {
+              const isLatest = i === 0;
+              return (
+                <li key={release.version} id={`v${release.version}`} className="scroll-mt-24">
+                  <ReleaseEntry release={release} isLatest={isLatest} />
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       </Container>
 
       {/* Roadmap */}

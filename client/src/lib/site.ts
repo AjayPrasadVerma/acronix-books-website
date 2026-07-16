@@ -46,6 +46,11 @@ export const company = {
   /** Parent company website. */
   url: 'https://acronix.in',
   supportEmail: 'support@acronixbooks.com',
+  /** Support phone. `tel` is the dial string; `display` is what a reader sees. */
+  supportPhone: {
+    tel: '+919625802906',
+    display: '+91 96258 02906',
+  },
   /** ISO date the current policy versions took effect. */
   policyEffectiveDate: '2026-07-01',
   jurisdiction: 'India',
