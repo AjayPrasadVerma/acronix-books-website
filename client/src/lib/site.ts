@@ -1,6 +1,9 @@
 // Single source of truth for site-wide constants. Keep the URLs here in sync
 // with apps/desktop/electron-builder.yml (`publish.url`) and docs/release.md.
 
+import { solutions } from './solutions';
+import { industries } from './industries';
+
 export const site = {
   name: 'Acronix Books',
   shortName: 'Acronix',
@@ -120,39 +123,114 @@ export const downloads: Record<Exclude<Platform, 'unknown'>, DownloadTarget> = {
   },
 };
 
-export const nav = {
-  primary: [
-    { label: 'Features', href: '/features/' },
-    { label: 'Pricing', href: '/pricing/' },
-    { label: 'Docs', href: '/docs/' },
-    { label: 'Changelog', href: '/changelog/' },
-    { label: 'Blog', href: '/blog/' },
-    { label: 'Support', href: '/support/' },
-  ],
-  footer: {
-    Product: [
-      { label: 'Features', href: '/features/' },
-      { label: 'Pricing', href: '/pricing/' },
-      { label: 'Download', href: '/download/' },
-      { label: 'Changelog', href: '/changelog/' },
-      { label: 'System requirements', href: '/download/#requirements' },
-    ],
-    Resources: [
-      { label: 'Documentation', href: '/docs/' },
-      { label: 'Getting started', href: '/docs/getting-started/' },
-      { label: 'GST filing', href: '/docs/gst-filing/' },
-      { label: 'Blog', href: '/blog/' },
-    ],
-    Company: [
-      { label: 'About', href: '/about/' },
-      { label: 'Security', href: '/security/' },
-      { label: 'Help & Support', href: '/support/' },
-      { label: 'Contact', href: 'mailto:support@acronixbooks.com' },
-    ],
-    Legal: [
-      { label: 'Privacy Policy', href: '/privacy/' },
-      { label: 'Terms of Service', href: '/terms/' },
-      { label: 'Refund & Cancellation', href: '/refund/' },
+// ------------------------------------------------------------------ *
+// Primary navigation — a data-driven mega-menu. The Header renders this
+// generically (no per-item JSX), so a new top-level entry or menu link is a
+// data change here, never a component change. The Solutions and Industries
+// panels are derived from lib/solutions.ts and lib/industries.ts so the menu
+// can never drift out of sync with the pages that actually exist.
+// ------------------------------------------------------------------ */
+
+/** A single leaf link inside a menu panel, footer column, or drawer section. */
+export interface NavLink {
+  label: string;
+  href: string;
+  /** One-line summary. Shown in mega/list panels; omitted in the footer. */
+  description?: string;
+}
+
+/**
+ * A top-level nav entry. Either a plain link, or a menu that expands into a
+ * panel on desktop and an accordion section on mobile.
+ *   - `mega`: two-column grid with descriptions (Solutions, Industries).
+ *   - `list`: compact single column with descriptions (Resources).
+ */
+export type NavEntry =
+  | { kind: 'link'; label: string; href: string }
+  | {
+      kind: 'menu';
+      label: string;
+      layout: 'mega' | 'list';
+      /** The group's overview page — the "see all" link at the panel's foot. */
+      overviewHref: string;
+      overviewLabel: string;
+      links: NavLink[];
+    };
+
+const solutionLinks: NavLink[] = solutions.map((s) => ({
+  label: s.name,
+  href: `/solutions/${s.slug}/`,
+  description: s.tagline,
+}));
+
+const industryLinks: NavLink[] = industries.map((i) => ({
+  label: i.name,
+  href: `/industries/${i.slug}/`,
+  description: i.tagline,
+}));
+
+const primary: NavEntry[] = [
+  {
+    kind: 'menu',
+    label: 'Solutions',
+    layout: 'mega',
+    overviewHref: '/solutions/',
+    overviewLabel: 'See all solutions',
+    links: solutionLinks,
+  },
+  {
+    kind: 'menu',
+    label: 'Industries',
+    layout: 'mega',
+    overviewHref: '/industries/',
+    overviewLabel: 'See all industries',
+    links: industryLinks,
+  },
+  { kind: 'link', label: 'Pricing', href: '/pricing/' },
+  { kind: 'link', label: 'Docs', href: '/docs/' },
+  {
+    kind: 'menu',
+    label: 'Resources',
+    layout: 'list',
+    overviewHref: '/docs/',
+    overviewLabel: 'Browse the documentation',
+    links: [
+      { label: 'Documentation', href: '/docs/', description: 'Guides, reference and how-tos' },
+      { label: 'Blog', href: '/blog/', description: 'Product notes and deep dives' },
+      { label: 'Changelog', href: '/changelog/', description: 'What shipped, release by release' },
+      { label: 'Support', href: '/support/', description: 'Reach the team for help' },
     ],
   },
-} as const;
+];
+
+/** Footer columns. Keyed by heading; Solutions/Industries reuse the nav data. */
+const footer: Record<string, NavLink[]> = {
+  Solutions: [...solutionLinks.map((l) => ({ label: l.label, href: l.href })), { label: 'All solutions', href: '/solutions/' }],
+  Industries: [...industryLinks.map((l) => ({ label: l.label, href: l.href })), { label: 'All industries', href: '/industries/' }],
+  Product: [
+    { label: 'Features', href: '/features/' },
+    { label: 'Pricing', href: '/pricing/' },
+    { label: 'Download', href: '/download/' },
+    { label: 'Changelog', href: '/changelog/' },
+    { label: 'System requirements', href: '/download/#requirements' },
+  ],
+  Resources: [
+    { label: 'Documentation', href: '/docs/' },
+    { label: 'Getting started', href: '/docs/getting-started/' },
+    { label: 'GST filing', href: '/docs/gst-filing/' },
+    { label: 'Blog', href: '/blog/' },
+  ],
+  Company: [
+    { label: 'About', href: '/about/' },
+    { label: 'Security', href: '/security/' },
+    { label: 'Help & Support', href: '/support/' },
+    { label: 'Contact', href: 'mailto:support@acronixbooks.com' },
+  ],
+  Legal: [
+    { label: 'Privacy Policy', href: '/privacy/' },
+    { label: 'Terms of Service', href: '/terms/' },
+    { label: 'Refund & Cancellation', href: '/refund/' },
+  ],
+};
+
+export const nav = { primary, footer };

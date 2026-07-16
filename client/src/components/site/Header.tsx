@@ -7,7 +7,7 @@ import { Download, Menu, X } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { ButtonLink } from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
-import { nav } from '@/lib/site';
+import { DesktopNav, MobileNav } from '@/components/site/MegaMenu';
 import { cn } from '@/lib/utils';
 
 export function Header() {
@@ -41,22 +41,7 @@ export function Header() {
           <Logo />
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
-          {nav.primary.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'rounded-lg px-3 py-2 text-[0.95rem] font-medium transition-colors',
-                isActive(item.href)
-                  ? 'text-brand-600 dark:text-brand-400'
-                  : 'text-[var(--fg-muted)] hover:text-[var(--fg)]',
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+        <DesktopNav isActive={isActive} />
 
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
@@ -81,17 +66,9 @@ export function Header() {
       </nav>
 
       {open && (
-        <div className="border-t border-[var(--border)] bg-[var(--bg)] md:hidden">
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-[var(--border)] bg-[var(--bg)] md:hidden">
           <div className="flex flex-col gap-1 px-5 py-4">
-            {nav.primary.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-lg px-3 py-2.5 text-base font-medium text-[var(--fg)] hover:bg-[var(--bg-subtle)]"
-              >
-                {item.label}
-              </Link>
-            ))}
+            <MobileNav isActive={isActive} />
             <ButtonLink href="/download/" className="mt-2 w-full">
               <Download className="h-4 w-4" />
               Download for free

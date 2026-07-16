@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--bg-subtle)]">
       <Container className="py-14" size="wide">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
+        <div className="grid gap-10 lg:grid-cols-[1.4fr_3fr]">
           <div className="max-w-xs">
             <Link href="/" aria-label="Acronix Books home">
               <Logo />
@@ -19,32 +19,34 @@ export function Footer() {
             </p>
           </div>
 
-          {Object.entries(nav.footer).map(([group, links]) => (
-            <div key={group}>
-              <h3 className="text-sm font-semibold text-[var(--fg)]">{group}</h3>
-              <ul className="mt-4 space-y-2.5">
-                {links.map((link) => (
-                  <li key={link.href}>
-                    {link.href.startsWith('mailto:') ? (
-                      <a
-                        href={link.href}
-                        className="text-sm text-[var(--fg-muted)] transition-colors hover:text-brand-600 dark:hover:text-brand-400"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        className="text-sm text-[var(--fg-muted)] transition-colors hover:text-brand-600 dark:hover:text-brand-400"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
+            {Object.entries(nav.footer).map(([group, links]) => (
+              <div key={group}>
+                <h3 className="text-sm font-semibold text-[var(--fg)]">{group}</h3>
+                <ul className="mt-4 space-y-2.5">
+                  {links.map((link) => (
+                    <li key={link.href}>
+                      {link.href.startsWith('mailto:') ? (
+                        <a
+                          href={link.href}
+                          className="text-sm text-[var(--fg-muted)] transition-colors hover:text-brand-600 dark:hover:text-brand-400"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="text-sm text-[var(--fg-muted)] transition-colors hover:text-brand-600 dark:hover:text-brand-400"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-[var(--border)] pt-6 text-sm text-[var(--fg-subtle)] sm:flex-row sm:items-center">
