@@ -322,6 +322,7 @@ const footer: Record<string, NavLink[]> = {
   Product: [
     { label: 'Features', href: '/features/' },
     { label: 'Pricing', href: '/pricing/' },
+    { label: 'Request a licence', href: '/request-license/' },
     { label: 'Download', href: '/download/' },
     { label: 'Changelog', href: '/changelog/' },
     { label: 'System requirements', href: '/download/#requirements' },
