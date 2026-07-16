@@ -9,7 +9,7 @@ Your books live on your computer, so backups are how you protect against a faile
 
 ## How backups work
 
-Acronix Books creates a backup using SQLite's **`VACUUM INTO`**, which writes a clean, compact copy of your database. The backup file is **encrypted** just like your live book — it carries no plaintext, so it's safe to store on an external drive or the cloud.
+Acronix Books writes a clean, compact snapshot of your database rather than copying the live file, so a backup is never taken mid-write. The backup file is **encrypted** just like your live book — it carries no readable data, so it's safe to store on an external drive or the cloud.
 
 ## Create a backup
 
