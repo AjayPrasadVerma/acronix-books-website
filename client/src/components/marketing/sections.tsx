@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { AlertTriangle, ArrowRight, Check, Download } from 'lucide-react';
+import { ArrowRight, Check, Download } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Badge } from '@/components/ui/Primitives';
 import { ButtonLink } from '@/components/ui/Button';
@@ -111,13 +111,11 @@ export function CapabilityGrid({
   title,
   description,
   items,
-  scopeNote,
 }: {
   eyebrow: string;
   title: string;
   description?: string;
   items: readonly { title: string; body: string }[];
-  scopeNote?: string;
 }) {
   return (
     <section className="border-b border-[var(--border)]">
@@ -144,28 +142,8 @@ export function CapabilityGrid({
           ))}
         </div>
 
-        {scopeNote && <ScopeNote body={scopeNote} />}
       </Container>
     </section>
-  );
-}
-
-/**
- * The "here is what we do NOT do" block. Deliberately prominent rather than
- * buried: a marketing page that only lists strengths teaches a prospect to
- * distrust the whole page once they find the first gap themselves.
- */
-export function ScopeNote({ body }: { body: string }) {
-  return (
-    <div className="mt-14 flex gap-4 rounded-2xl border border-amber-500/25 bg-amber-50/60 p-6 dark:bg-amber-400/5">
-      <AlertTriangle className="h-5 w-5 flex-none text-amber-600 dark:text-amber-400" aria-hidden />
-      <div>
-        <h3 className="font-display text-base font-bold text-[var(--fg)]">
-          What Acronix does not do here
-        </h3>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--fg-muted)]">{body}</p>
-      </div>
-    </div>
   );
 }
 

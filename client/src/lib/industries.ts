@@ -8,8 +8,18 @@
 // file is the most tempting place in the codebase to invent a feature, because
 // vertical marketing copy sounds plausible in the abstract. It isn't abstract:
 // a Surat trader will download the build and look for the thing you wrote.
-// If a vertical has no specific support, say so (see `ecommerce`, `education`)
-// rather than implying a module that does not exist.
+//
+// These pages don't enumerate what's missing — that's a marketing call, and a
+// site is not obliged to list its own gaps. What it IS obliged to do is not
+// assert what isn't there. So: if a vertical has no specific support, write
+// about the general capability that genuinely serves it (GST, stock, credit,
+// reports) and stay silent on the rest. Never bridge the gap with a claim.
+// Verified absent as of now — do NOT write these into any entry:
+// serial/IMEI tracking, typed size/colour variant matrix, batch/expiry on the
+// sale invoice (it exists on stock journals, challans and the Stock Ledger
+// only), expiry-alert reports, price lists / quantity slabs / scheme engines,
+// route or van sales, bill-of-materials, POS hardware or scanner integration,
+// jewellery weight/purity, marketplace settlement reconciliation.
 
 import type { LucideIcon } from 'lucide-react';
 import {
@@ -63,12 +73,6 @@ export interface Industry {
   capabilities: IndustryCapability[];
   /** Short scannable strip of the modules that matter most here. */
   highlights: string[];
-  /**
-   * Set when the product has NO vertical-specific support and the page is
-   * honestly just "general accounting applied to this trade". Rendered as a
-   * plain-spoken scope note instead of being quietly omitted.
-   */
-  scopeNote?: string;
 }
 
 export const industries: Industry[] = [
@@ -136,8 +140,6 @@ export const industries: Industry[] = [
       'Stock Journals',
       'Multi-warehouse',
     ],
-    scopeNote:
-      'The honest gap, and for this trade it is the big one: colour, size and lot are not yet typed columns on an item. They live in a flexible attributes field, which means you can record them but cannot report across them — no colour-wise or lot-wise stock statement. Typed columns are planned. If your day is driven by a quality × shade × lot grid, know that before you commit.',
   },
   {
     slug: 'wholesale',
@@ -203,8 +205,6 @@ export const industries: Industry[] = [
       'Ageing reports',
       'Keyboard-first',
     ],
-    scopeNote:
-      'Pricing is per item — a default sales rate, a purchase rate and an MRP. There are no customer-specific price lists, no quantity slabs and no scheme engine, so a party who has negotiated their own rate card means overriding the rate on the voucher. There is also no route or van-sales module. If your distribution runs on schemes and beat plans, that part stays outside Acronix today.',
   },
   {
     slug: 'manufacturing',
@@ -270,8 +270,6 @@ export const industries: Industry[] = [
       'Multi-warehouse',
       'Audit trail',
     ],
-    scopeNote:
-      'Acronix models consumption and production through stock journals, with valuation and COGS behind them. It does not currently ship a bill-of-materials or production-planning module — if your process depends on multi-level BOM explosion, that is not here yet.',
   },
   {
     slug: 'retail',
@@ -337,8 +335,6 @@ export const industries: Industry[] = [
       'Day book',
       'Encrypted books',
     ],
-    scopeNote:
-      'Acronix is not a POS. Items carry barcode and SKU fields, but that is data, not hardware — there is no scanner, cash-drawer or card-terminal integration, and no touch-screen till layout. Billing is a keyboard-driven voucher, which is fast once learnt but is not a counter POS. There is also no loyalty or membership module.',
   },
   {
     slug: 'services',
@@ -396,8 +392,6 @@ export const industries: Industry[] = [
       'Multi-company',
       'Role-based access',
     ],
-    scopeNote:
-      'This is accounting for a service business, not practice management. There are no timesheets, no billable-hours capture and no project profitability view, so what you bill for is your own working. There is also no recurring-invoice scheduler — a monthly retainer is raised each month rather than issuing itself.',
   },
   {
     slug: 'ecommerce',
@@ -444,8 +438,6 @@ export const industries: Industry[] = [
       },
     ],
     highlights: ['HSN summaries', 'Credit notes', 'Multi-warehouse', 'GSTR-1 & 3B', 'Encrypted books'],
-    scopeNote:
-      'Being straight with you: Acronix does not integrate with Amazon, Flipkart or any marketplace, and does not reconcile settlement reports. If automated marketplace payout reconciliation is your main problem, this is not the tool for that job — it is the tool for keeping the resulting books correct.',
   },
   {
     slug: 'education',
@@ -492,8 +484,6 @@ export const industries: Industry[] = [
       },
     ],
     highlights: ['Receipts & outstanding', 'Role-based access', 'Encrypted books', 'Audit log', 'Financial statements'],
-    scopeNote:
-      'Scope, stated plainly: this is an accounting system, not a school-management system. There is no student information module, no fee-structure builder, no attendance and no report cards. Students and parents are ledger accounts, and fees are receipts against bills. If you need an SIS, use one alongside Acronix — not instead of it.',
   },
   {
     slug: 'grocery',
@@ -547,8 +537,8 @@ export const industries: Industry[] = [
         body: 'Minimum, maximum and reorder quantities are fields on each item, so the list of what has dropped below its level is data you can read rather than a shelf you have to walk.',
       },
       {
-        title: 'Batch and expiry where they are captured',
-        body: 'Stock journals, delivery challans and the Stock Ledger carry batch number, manufacture date and expiry date — useful for tracing a lot you received, within the limits in the note below.',
+        title: 'Batch and expiry on stock movements',
+        body: 'Stock journals, delivery challans and the Stock Ledger carry batch number, manufacture date and expiry date, so a lot you took in can be traced through the godown.',
       },
     ],
     highlights: [
@@ -559,8 +549,6 @@ export const industries: Industry[] = [
       'Offline-first',
       'Keyboard-first',
     ],
-    scopeNote:
-      'Straight about expiry: batch, manufacture and expiry dates can be captured on stock journals and delivery challans and are visible in the Stock Ledger — but they are not on the sale or purchase invoice form, and there is no "expiring in N days" report. Shelf-life chasing is still a manual round of the shelf. Also worth saying: the item master has barcode and SKU fields, but Acronix does not integrate with scanner or POS hardware.',
   },
   {
     slug: 'stationery',
@@ -626,8 +614,6 @@ export const industries: Industry[] = [
       'Reorder levels',
       'GSTR-1 & 3B',
     ],
-    scopeNote:
-      'One real limitation: Acronix has no typed variant matrix. A pen that comes in five colours or a file that comes in three sizes has to be separate items, or use the untyped `attributes` field on the item master — there is no size × colour grid, and typed variant columns are marked v1.1 in the code. If your catalogue is genuinely variant-shaped, expect a longer item list than you would like.',
   },
   {
     slug: 'furniture',
@@ -693,8 +679,6 @@ export const industries: Industry[] = [
       'FIFO + weighted-average',
       'Stock journals',
     ],
-    scopeNote:
-      'Two things this does not do. There is no bill-of-materials, so a dining set assembled from a table and six chairs is not something Acronix explodes for you — you model it as items and move them with stock journals. And there is no typed variant matrix: a sofa in four fabrics and two finishes means four-by-two separate items, or the untyped `attributes` field. Made-to-order work with a fabric-and-finish grid will feel cramped.',
   },
   {
     slug: 'electricals',
@@ -760,8 +744,6 @@ export const industries: Industry[] = [
       'E-way bill',
       'FIFO + weighted-average',
     ],
-    scopeNote:
-      'The honest gap: Acronix has no serial-number tracking. If you need to record which specific MCB or motor went to which customer to service a warranty claim later, that does not exist — not as a field, not as a report. Warranty follow-up stays on your own register. The same applies to brand-and-model as structured data: SKU, alias and the untyped `attributes` field are what you have, not a typed variant matrix.',
   },
   {
     slug: 'auto-parts',
@@ -827,8 +809,6 @@ export const industries: Industry[] = [
       'Multi-warehouse',
       'Offline-first',
     ],
-    scopeNote:
-      'What is genuinely missing: there is no part-number supersession or cross-reference chain. When a manufacturer replaces a part number with a new one, Acronix will not follow the chain for you — you can put the old code in the alias field, but keeping that convention consistent is your discipline, not the software’s. There is also no vehicle make/model/year fitment catalogue: Acronix does not know which part fits which car. That knowledge stays with the person at the counter.',
   },
   {
     slug: 'chemicals',
@@ -863,7 +843,7 @@ export const industries: Industry[] = [
     capabilities: [
       {
         title: 'Batch, manufacture and expiry on stock movements',
-        body: 'Stock journals and delivery challans capture batch number, manufacture date and expiry date, and the Stock Ledger shows them — so tracing what came in under a lot is real, within the limits noted below.',
+        body: 'Stock journals and delivery challans capture batch number, manufacture date and expiry date, and the Stock Ledger shows them — so tracing what came in under a lot is real work the software does, not a register you keep alongside it.',
       },
       {
         title: 'FIFO where it is the honest answer',
@@ -894,8 +874,6 @@ export const industries: Industry[] = [
       'Bill-by-bill outstanding',
       'Audit log',
     ],
-    scopeNote:
-      'Where the batch story stops, precisely: batch number, manufacture date and expiry date exist on stock journals, delivery challans and the Stock Ledger — but NOT on the sale or purchase invoice form. So batch capture at the point of billing is not there, and there is no expiry-alert report to tell you what ages out next month. Also absent: any hazmat handling — no MSDS storage, no licence or permit expiry tracking, no schedule/classification fields. That compliance layer stays outside Acronix.',
   },
   {
     slug: 'packaging',
@@ -961,8 +939,6 @@ export const industries: Industry[] = [
       'Multi-warehouse',
       'E-way bill',
     ],
-    scopeNote:
-      'Two real constraints. There is no bill-of-materials: Acronix will not compute how many square metres of board a given carton consumes — you record the actual consumption on the stock journal, and the norm lives in your own estimate. And specifications are not typed fields. Size, ply, GSM and grade have to be baked into the item name, or held in the untyped `attributes` field; there is no spec grid and no way to report across a dimension you did not make part of the item itself.',
   },
   {
     slug: 'books',
@@ -1028,8 +1004,6 @@ export const industries: Industry[] = [
       'Multi-warehouse',
       'Financial statements',
     ],
-    scopeNote:
-      'Being specific about the gaps. There is no ISBN field — you put the ISBN in the SKU or alias field and it works, but Acronix does not know it is an ISBN and will not validate or look anything up from it. There is no consignment or sale-or-return workflow either: stock taken on a returnable basis is ordinary purchased stock in your book, and sending it back is a debit note. That is a workable convention, not a modelled one — the distinction between owned and consigned stock is not something the software enforces. And there is no royalty calculation of any kind, so publisher-side author accounting stays outside Acronix.',
   },
 ];
 

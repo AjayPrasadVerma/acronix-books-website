@@ -69,7 +69,6 @@ export default async function IndustryPage({ params }: Params) {
         title="Features that exist, doing the actual work"
         description="Everything below is in the build you can download today."
         items={industry.capabilities}
-        scopeNote={industry.scopeNote}
       />
 
       <RelatedLinks

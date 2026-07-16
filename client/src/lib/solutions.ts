@@ -5,9 +5,14 @@
 // 🚨 HONESTY RULE — same as lib/industries.ts, and it bites harder here.
 // These pages are the ones a prospect reads to decide whether a specific
 // capability exists. Every bullet must name something the build actually does.
-// Where a capability has a real limit, `scopeNote` says so out loud — see
-// `cloud-sync`, where the server-side mirror is deliberately NOT end-to-end
-// encrypted (product CLAUDE.md §15.13). Never let copy imply otherwise.
+//
+// The pages don't enumerate gaps — but `cloud-sync` MUST keep its "How the
+// server copy works" bullet. That is not a gap-confession, it is where the
+// customer's financial data physically sits: the server mirror is readable by
+// design (product CLAUDE.md §15.13), while the local file stays SQLCipher-
+// encrypted. docs/security.mdx says "there is no plaintext copy of your
+// ledgers" — true of the local file, and misleading about the cloud unless
+// this bullet stands. Never let copy imply cloud sync is end-to-end encrypted.
 
 import type { LucideIcon } from 'lucide-react';
 import {
@@ -52,7 +57,6 @@ export interface Solution {
   challenges: { title: string; body: string }[];
   capabilities: { title: string; body: string }[];
   highlights: string[];
-  scopeNote?: string;
 }
 
 export const solutions: Solution[] = [
@@ -165,8 +169,6 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['Multi-warehouse', 'FIFO + weighted-average', 'Stock journals', 'Delivery challans', 'Party stock'],
-    scopeNote:
-      'Acronix tracks stock, movement and valuation. It does not currently ship a bill-of-materials or production-planning module, and there is no barcode-scanner integration yet.',
   },
   {
     slug: 'accounting',
@@ -269,8 +271,6 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['IRP-schema payload', 'Pre-submit validation', 'Response import', 'Role-gated cancel'],
-    scopeNote:
-      'Acronix builds and parses the payloads; it is not a GSP and does not transmit to the IRP on your behalf. You move the payload and the response through your GSP or the portal. That also means no per-invoice GSP fee flows through us.',
   },
   {
     slug: 'e-way-bill',
@@ -318,8 +318,6 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['Transport block', 'Ship-to distance', 'Pre-submit validation', 'Offline-first'],
-    scopeNote:
-      'As with e-invoicing, Acronix generates and parses the payloads rather than acting as a GSP. Transmission to the NIC portal happens through your GSP or the portal itself.',
   },
   {
     slug: 'gst-returns',
@@ -371,8 +369,6 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['GSTR-1', 'GSTR-3B', 'HSN summary', 'Tax registers', 'Portal exports'],
-    scopeNote:
-      'Acronix prepares returns and the exports for them. It does not file on your behalf and does not reconcile GSTR-2A/2B against your purchases yet — you or your CA still submit through the portal.',
   },
   {
     slug: 'reports',
@@ -470,13 +466,15 @@ export const solutions: Solution[] = [
         body: 'The server accepts no plaintext HTTP, and refresh tokens rotate with reuse detection so a stolen token family gets revoked.',
       },
       {
+        title: 'How the server copy works',
+        body: 'Sync keeps a server-side mirror of the synced company — scoped to your account, access-audited, with authentication secrets separately encrypted. It is a readable mirror by design: that is what lets the books be queried directly rather than only restored. Your local file and its .acxb backups stay SQLCipher-encrypted either way.',
+      },
+      {
         title: 'Genuinely optional',
-        body: 'The app runs fully offline with no cloud account at all. Sync is a convenience you switch on, never a requirement.',
+        body: 'The app runs fully offline with no cloud account at all. Sync is a convenience you switch on, never a requirement — leave it off and your books never leave your machine.',
       },
     ],
     highlights: ['Encrypted local book', 'Multi-device restore', 'Email-OTP enrolment', 'TLS 1.2+', 'Fully optional'],
-    scopeNote:
-      'Being precise, because this matters: cloud sync is NOT end-to-end encrypted. Your local file and its backups are encrypted, and everything in transit is TLS — but the server-side copy is a readable mirror, held so the books can be queried directly in future. Access is scoped per account and audited, and authentication secrets are separately encrypted, but you should decide with that fact in front of you rather than behind it. If you want zero server-side readability, keep sync switched off and use local encrypted backups instead.',
   },
 ];
 

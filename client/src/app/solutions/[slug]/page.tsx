@@ -67,7 +67,6 @@ export default async function SolutionPage({ params }: Params) {
         title="How it works in the app you can download"
         description="Every capability below ships in the current build."
         items={solution.capabilities}
-        scopeNote={solution.scopeNote}
       />
 
       <RelatedLinks
