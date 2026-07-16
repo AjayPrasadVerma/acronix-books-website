@@ -63,7 +63,7 @@ const controls: Control[] = [
   {
     icon: Archive,
     title: 'Encrypted backups',
-    body: 'Backups are consistent snapshots written with VACUUM INTO to .acxb files that stay SQLCipher-encrypted. We never raw-copy a live database, so a backup is never a plaintext leak.',
+    body: 'A backup is a clean, consistent snapshot written to an .acxb file that stays AES-256 encrypted. It is never a raw copy of a live database, so a backup left on a pen drive or in a cloud folder is as protected as the book itself.',
   },
   {
     icon: FileCheck2,
@@ -77,8 +77,8 @@ const controls: Control[] = [
   },
   {
     icon: Server,
-    title: 'Renderer has zero DB access',
-    body: 'The interface never touches the database directly. Every request flows React → preload → a typed IPC bridge → Zod validation → service → SQLCipher. The UI never learns the key, path, or SQL.',
+    title: 'The screen never touches your data',
+    body: 'The part of the app you see cannot reach the database. Every request is validated before it is allowed anywhere near your books, and the interface never holds the encryption key.',
   },
 ];
 

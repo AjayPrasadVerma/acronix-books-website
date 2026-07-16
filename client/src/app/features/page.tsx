@@ -356,7 +356,7 @@ const rows: FeatureRowProps[] = [
       },
       {
         title: 'Prove integrity with an audit chain',
-        body: 'A tamper-evident audit hash chain, a login log and voucher audit record every change so alteration is detectable, period lock freezes filed periods, and encrypted .acxb backups (VACUUM INTO) stay protected outside the app.',
+        body: 'A tamper-evident audit trail, a login log and voucher audit record every change so alteration is detectable, period lock freezes filed periods, and encrypted .acxb backups stay protected outside the app.',
       },
     ],
     capabilities: [

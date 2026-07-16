@@ -91,7 +91,7 @@ export const releases: ReleaseNote[] = [
         title: 'Added',
         items: [
           'GSTR-3B summary export alongside the existing GSTR-1 export.',
-          'Encrypted backups via SQLite VACUUM INTO, restorable on the same or a new device.',
+          'Encrypted backups, restorable on the same or a new device.',
         ],
       },
       {

@@ -399,8 +399,8 @@ export const solutions: Solution[] = [
     ],
     capabilities: [
       {
-        title: 'Aggregated in SQL, always',
-        body: 'Every report does its SUM and GROUP BY in the database and returns finished rows — audited across all twenty reports, with no JS-side aggregation anywhere.',
+        title: 'Instant, even on a full year',
+        body: 'Reports are computed where the data lives and come back finished, so a full-year Trial Balance opens as fast as a one-week one.',
       },
       {
         title: 'The full statutory set',
@@ -416,7 +416,7 @@ export const solutions: Solution[] = [
       },
       {
         title: 'Built for 500k vouchers',
-        body: 'Bounded working windows, FTS5 search and compound indices mean a list stays instant instead of loading a year into memory.',
+        body: 'Lists open on a sensible working window and search finds anything outside it instantly, so the books stay quick as the years pile up.',
       },
     ],
     highlights: ['Trial Balance', 'P&L & Balance Sheet', 'Cash Flow', 'Day Book', 'Ageing', 'PDF + Excel'],
