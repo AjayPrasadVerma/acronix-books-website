@@ -25,7 +25,10 @@ const panelId = (label: string) => `mega-panel-${label.toLowerCase().replace(/\s
  * place. A per-menu copy of this would be the DRY failure this file exists
  * to avoid.
  * ------------------------------------------------------------------ */
-function PanelLink({ link }: { link: NavLink }) {
+// `compact` drops the description. A wide list (15 industries) needs to run
+// horizontally across columns; keeping two lines of prose per row is what made
+// the panel taller than the viewport.
+function PanelLink({ link, compact = false }: { link: NavLink; compact?: boolean }) {
   const Icon = link.icon;
   return (
     <Link
@@ -44,7 +47,7 @@ function PanelLink({ link }: { link: NavLink }) {
         <span className="block text-sm font-semibold text-[var(--fg)] transition-colors group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400">
           {link.label}
         </span>
-        {link.description && (
+        {!compact && link.description && (
           <span className="mt-0.5 block text-xs leading-snug text-[var(--fg-muted)]">
             {link.description}
           </span>
@@ -86,14 +89,22 @@ function columnsClass(count: number): string {
   return 'grid-cols-1';
 }
 
-function GroupColumn({ group, itemsClass }: { group: NavGroup; itemsClass?: string }) {
+function GroupColumn({
+  group,
+  itemsClass,
+  compact = false,
+}: {
+  group: NavGroup;
+  itemsClass?: string;
+  compact?: boolean;
+}) {
   return (
     <div className="px-1.5 first:pl-0 last:pr-0">
       <GroupLabel>{group.label}</GroupLabel>
       <ul className={cn('grid gap-0.5', itemsClass)}>
         {group.links.map((link) => (
           <li key={link.href}>
-            <PanelLink link={link} />
+            <PanelLink link={link} compact={compact} />
           </li>
         ))}
       </ul>
@@ -117,7 +128,8 @@ function MenuPanel({ entry }: { entry: MenuEntry }) {
           <GroupColumn
             key={group.label}
             group={group}
-            itemsClass={isGrid ? 'sm:grid-cols-2' : undefined}
+            itemsClass={isGrid ? 'sm:grid-cols-2 lg:grid-cols-3' : undefined}
+            compact={isGrid}
           />
         ))}
       </div>
@@ -130,7 +142,9 @@ function MenuPanel({ entry }: { entry: MenuEntry }) {
 
 function panelPosition(entry: MenuEntry): string {
   const edge = entry.align === 'right' ? 'right-0' : 'left-0';
-  if (entry.layout === 'grid') return cn(edge, 'w-[min(92vw,38rem)]');
+  // The grid panel holds every industry (15 and counting) — it has to run wide
+  // across 3 columns, not tall down 2, or it outgrows the viewport.
+  if (entry.layout === 'grid') return cn(edge, 'w-[min(94vw,52rem)]');
   if (entry.groups.length >= 3) return cn(edge, 'w-[min(94vw,50rem)]');
   return cn(edge, 'w-[min(92vw,32rem)]');
 }
