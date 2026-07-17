@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { Download, ArrowRight, Check } from 'lucide-react';
+import { Download, Check, KeyRound } from 'lucide-react';
 import { ButtonLink } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Primitives';
 import { Container } from '@/components/ui/Container';
-import { downloads, site } from '@/lib/site';
+import { downloads, plan, site } from '@/lib/site';
 import { DashboardMock } from '@/components/mockups/DashboardMock';
 
 // e.g. "0.1.0" -> "0.1" for the early-access badge.
@@ -39,19 +39,23 @@ export function Hero() {
             vouchers, with sub-200ms actions and your data encrypted on your own machine.
           </p>
 
-          {/* Primary CTAs — inline (our own treatment, not a boxed clone) */}
+          {/* Primary CTAs. The licence leads, the download follows — the app
+              activates with a License Number, so sending someone to the
+              installer first lands them on an activation screen with nothing to
+              type into it. */}
           <div className="animate-fade-up mt-9 flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
-            <ButtonLink href={win.href ?? '/download/'} external size="lg">
+            <ButtonLink href="/request-license/" size="lg">
+              <KeyRound className="h-5 w-5" />
+              Start your {plan.trialDays}-day trial
+            </ButtonLink>
+            <ButtonLink href={win.href ?? '/download/'} external variant="outline" size="lg">
               <Download className="h-5 w-5" />
               Download for Windows
             </ButtonLink>
-            <ButtonLink href="/download/" variant="outline" size="lg">
-              All platforms &amp; requirements
-              <ArrowRight className="h-5 w-5" />
-            </ButtonLink>
           </div>
           <p className="animate-fade-up mt-3 text-sm text-[var(--fg-subtle)]">
-            Free · {win.sizeHint} · macOS &amp; Linux coming soon. By downloading you agree to our{' '}
+            {plan.trialDays}-day trial, no card · {win.sizeHint} · macOS &amp; Linux coming soon.
+            Activates with a License Number we issue — by{' '}
             <Link href="/terms/" className="underline underline-offset-2 hover:text-[var(--fg)]">
               Terms
             </Link>{' '}

@@ -24,6 +24,7 @@ const staticRoutes: StaticRoute[] = [
   { path: '/download/', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/solutions/', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/industries/', changeFrequency: 'monthly', priority: 0.9 },
+  { path: '/request-license/', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/pricing/', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/docs/', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/security/', changeFrequency: 'monthly', priority: 0.7 },

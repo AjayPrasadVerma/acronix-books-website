@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { FocusEvent, KeyboardEvent } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
@@ -28,23 +29,47 @@ const panelId = (label: string) => `mega-panel-${label.toLowerCase().replace(/\s
 // `compact` drops the description. A wide list (15 industries) needs to run
 // horizontally across columns; keeping two lines of prose per row is what made
 // the panel taller than the viewport.
-function PanelLink({ link, compact = false }: { link: NavLink; compact?: boolean }) {
+function PanelLink({
+  link,
+  compact = false,
+  active = false,
+}: {
+  link: NavLink;
+  compact?: boolean;
+  active?: boolean;
+}) {
   const Icon = link.icon;
   return (
     <Link
       href={link.href}
-      className="group/link flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-[var(--bg-subtle)] focus-visible:bg-[var(--bg-subtle)]"
+      aria-current={active ? 'page' : undefined}
+      className={cn(
+        'group/link flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors focus-visible:bg-[var(--bg-subtle)]',
+        active ? 'bg-brand-50 dark:bg-brand-400/10' : 'hover:bg-[var(--bg-subtle)]',
+      )}
     >
       {Icon && (
         <span
-          className="mt-px inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-subtle)] text-[var(--fg-muted)] transition-colors group-hover/link:border-brand-600/30 group-hover/link:text-brand-600 dark:group-hover/link:border-brand-400/30 dark:group-hover/link:text-brand-400"
+          className={cn(
+            'mt-px inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border transition-colors',
+            active
+              ? 'border-brand-600/30 bg-brand-100/60 text-brand-600 dark:border-brand-400/30 dark:bg-brand-400/15 dark:text-brand-400'
+              : 'border-[var(--border)] bg-[var(--bg-subtle)] text-[var(--fg-muted)] group-hover/link:border-brand-600/30 group-hover/link:text-brand-600 dark:group-hover/link:border-brand-400/30 dark:group-hover/link:text-brand-400',
+          )}
           aria-hidden
         >
           <Icon className="h-4 w-4" />
         </span>
       )}
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold text-[var(--fg)] transition-colors group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400">
+        <span
+          className={cn(
+            'block text-sm font-semibold transition-colors',
+            active
+              ? 'text-brand-600 dark:text-brand-400'
+              : 'text-[var(--fg)] group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400',
+          )}
+        >
           {link.label}
         </span>
         {!compact && link.description && (
@@ -93,10 +118,12 @@ function GroupColumn({
   group,
   itemsClass,
   compact = false,
+  isActive,
 }: {
   group: NavGroup;
   itemsClass?: string;
   compact?: boolean;
+  isActive: (href: string) => boolean;
 }) {
   return (
     <div className="px-1.5 first:pl-0 last:pr-0">
@@ -104,7 +131,7 @@ function GroupColumn({
       <ul className={cn('grid gap-0.5', itemsClass)}>
         {group.links.map((link) => (
           <li key={link.href}>
-            <PanelLink link={link} compact={compact} />
+            <PanelLink link={link} compact={compact} active={isActive(link.href)} />
           </li>
         ))}
       </ul>
@@ -112,7 +139,13 @@ function GroupColumn({
   );
 }
 
-function MenuPanel({ entry }: { entry: MenuEntry }) {
+function MenuPanel({
+  entry,
+  isActive,
+}: {
+  entry: MenuEntry;
+  isActive: (href: string) => boolean;
+}) {
   const isGrid = entry.layout === 'grid';
   return (
     <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-3 shadow-xl shadow-ink-950/10 ring-1 ring-black/5 dark:ring-white/5">
@@ -130,6 +163,7 @@ function MenuPanel({ entry }: { entry: MenuEntry }) {
             group={group}
             itemsClass={isGrid ? 'sm:grid-cols-2 lg:grid-cols-3' : undefined}
             compact={isGrid}
+            isActive={isActive}
           />
         ))}
       </div>
@@ -140,13 +174,27 @@ function MenuPanel({ entry }: { entry: MenuEntry }) {
   );
 }
 
+// Panels open CENTRED, not pinned to a trigger's left or right edge — an
+// edge-anchored panel drifts away from the label and reads as misaligned.
+//
+// They centre on the NAV CONTAINER, not on the individual trigger. Centring on
+// the trigger is the obvious reading of "centred" and it is wrong here: the nav
+// sits mid-header, so a 50rem panel under the rightmost trigger hangs off the
+// right edge (measured: 77px past the viewport at 1024px, which also gave the
+// whole page a horizontal scrollbar). Centring on the nav keeps every panel on
+// screen at any width, and since the nav is itself centred the panel reads as
+// centred too. The width cap alone does NOT solve this — it limits size, not
+// position.
 function panelPosition(entry: MenuEntry): string {
-  const edge = entry.align === 'right' ? 'right-0' : 'left-0';
-  // The grid panel holds every industry (15 and counting) — it has to run wide
-  // across 3 columns, not tall down 2, or it outgrows the viewport.
-  if (entry.layout === 'grid') return cn(edge, 'w-[min(94vw,52rem)]');
-  if (entry.groups.length >= 3) return cn(edge, 'w-[min(94vw,50rem)]');
-  return cn(edge, 'w-[min(92vw,32rem)]');
+  // The grid panel holds every industry (15 and counting) — it runs wide across
+  // 3 columns rather than tall down 2, or it outgrows the viewport.
+  const width =
+    entry.layout === 'grid'
+      ? 'w-[min(94vw,52rem)]'
+      : entry.groups.length >= 3
+        ? 'w-[min(94vw,50rem)]'
+        : 'w-[min(92vw,32rem)]';
+  return cn('left-1/2 -translate-x-1/2', width);
 }
 
 function DesktopMenuItem({
@@ -155,12 +203,14 @@ function DesktopMenuItem({
   active,
   onOpen,
   onClose,
+  isActive,
 }: {
   entry: MenuEntry;
   open: boolean;
   active: boolean;
   onOpen: () => void;
   onClose: () => void;
+  isActive: (href: string) => boolean;
 }) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -241,7 +291,12 @@ function DesktopMenuItem({
   };
 
   return (
-    <div className="relative" onMouseEnter={onOpen} onMouseLeave={onClose}>
+    // Deliberately NOT `relative`: the panel is absolutely positioned against
+    // the nav container (which is), so it centres on the whole nav rather than
+    // on this one trigger. Centring on the trigger overflowed the viewport for
+    // the rightmost menus — a 50rem panel hung 77px off-screen at 1024px and
+    // gave the page a horizontal scrollbar.
+    <div onMouseEnter={onOpen} onMouseLeave={onClose}>
       <button
         ref={triggerRef}
         type="button"
@@ -267,7 +322,7 @@ function DesktopMenuItem({
       {open && (
         <div className={cn('absolute top-full z-50 pt-2', panelPosition(entry))}>
           <div id={id} ref={panelRef} aria-label={entry.label} onKeyDown={onPanelKeyDown}>
-            <MenuPanel entry={entry} />
+            <MenuPanel entry={entry} isActive={isActive} />
           </div>
         </div>
       )}
@@ -278,6 +333,12 @@ function DesktopMenuItem({
 export function DesktopNav({ isActive }: NavProps) {
   const [openLabel, setOpenLabel] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Close on navigation. Clicking a link INSIDE the panel is not an outside
+  // click, and client-side routing never unmounts this component — so without
+  // this the panel stayed open on top of the page it had just navigated to.
+  useEffect(() => setOpenLabel(null), [pathname]);
 
   useEffect(() => {
     if (!openLabel) return;
@@ -297,7 +358,9 @@ export function DesktopNav({ isActive }: NavProps) {
   };
 
   return (
-    <div ref={navRef} onBlur={onBlur} className="hidden items-center gap-1 md:flex">
+    // `relative` is load-bearing: every panel positions against this container
+    // so it centres on the nav rather than on its own trigger. See panelPosition.
+    <div ref={navRef} onBlur={onBlur} className="relative hidden items-center gap-1 md:flex">
       {nav.primary.map((entry) =>
         entry.kind === 'link' ? (
           <Link
@@ -320,6 +383,7 @@ export function DesktopNav({ isActive }: NavProps) {
             active={menuIsActive(entry, isActive)}
             onOpen={() => setOpenLabel(entry.label)}
             onClose={() => setOpenLabel(null)}
+            isActive={isActive}
           />
         ),
       )}
@@ -334,10 +398,12 @@ function MobileSection({
   entry,
   open,
   onToggle,
+  isActive,
 }: {
   entry: MenuEntry;
   open: boolean;
   onToggle: () => void;
+  isActive: (href: string) => boolean;
 }) {
   const id = `${panelId(entry.label)}-mobile`;
   return (
@@ -361,7 +427,7 @@ function MobileSection({
             <div key={group.label} className="pt-1.5 first:pt-0">
               <GroupLabel>{group.label}</GroupLabel>
               {group.links.map((link) => (
-                <PanelLink key={link.href} link={link} />
+                <PanelLink key={link.href} link={link} active={isActive(link.href)} />
               ))}
             </div>
           ))}
@@ -374,6 +440,13 @@ function MobileSection({
 
 export function MobileNav({ isActive }: NavProps) {
   const [openLabel, setOpenLabel] = useState<string | null>(null);
+  const pathname = usePathname();
+
+  // The Header closes the drawer on navigate, but this accordion's own state
+  // survives — reopening the drawer would otherwise show the section you were
+  // last in, still expanded, from the previous page.
+  useEffect(() => setOpenLabel(null), [pathname]);
+
   return (
     <div className="flex flex-col gap-1">
       {nav.primary.map((entry) =>
@@ -396,6 +469,7 @@ export function MobileNav({ isActive }: NavProps) {
             onToggle={() =>
               setOpenLabel((current) => (current === entry.label ? null : entry.label))
             }
+            isActive={isActive}
           />
         ),
       )}

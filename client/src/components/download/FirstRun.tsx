@@ -1,4 +1,4 @@
-import { Building2, Database, Users, FileText } from 'lucide-react';
+import { Building2, Database, Users, FileText, KeyRound } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/Primitives';
 
@@ -10,14 +10,19 @@ interface Item {
 
 const items: Item[] = [
   {
+    icon: KeyRound,
+    title: 'Activate with your License Number',
+    body: 'First launch asks for the License Number we issue you and a password you choose. There is no username — one owner per install, and that password both signs you in and derives the key your books are encrypted with, so it is never sent anywhere. Save the recovery code it shows you.',
+  },
+  {
     icon: Building2,
     title: 'Create your first company',
-    body: 'On first launch you create a company file — its name, GSTIN and April–March financial year. No account, sign-up or internet connection is needed to work offline; you can be raising your first invoice within a minute of opening the app.',
+    body: 'Then create a company file — its name, GSTIN and April–March financial year. Once you are activated the app works fully offline; you can be raising your first invoice within a minute.',
   },
   {
     icon: Database,
     title: 'Your data lives on your machine',
-    body: 'The company file is stored locally on your own disk and encrypted at rest with SQLCipher (AES-256). It never leaves your machine unless you deliberately take a backup or turn on cloud sync, so you stay in full control of your books.',
+    body: 'The company file is stored locally on your own disk and encrypted at rest with AES-256. It never leaves your machine unless you deliberately take a backup or turn on cloud sync, so you stay in full control of your books.',
   },
   {
     icon: Users,
