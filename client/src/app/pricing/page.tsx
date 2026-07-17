@@ -4,15 +4,17 @@ import { Container } from '@/components/ui/Container';
 import { Badge } from '@/components/ui/Primitives';
 import { ButtonLink } from '@/components/ui/Button';
 import { Faq, type FaqItem } from '@/components/site/Faq';
-import { downloads, plan } from '@/lib/site';
+import { downloads, plan, priceInclusiveGst } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Pricing',
-  description: `Acronix Books gives you a ${plan.trialDays}-day free trial with every feature unlocked — full accounting, the complete GST suite, inventory, reports and encrypted local data. No credit card to start, and your books stay readable forever.`,
+  description: `One plan — ₹${plan.price?.toLocaleString('en-IN')}/year + ${plan.gstPercent}% GST — with every feature, unlimited companies and unlimited devices that sync automatically. Starts with a ${plan.trialDays}-day free trial, no card, and your books stay readable forever.`,
   alternates: { canonical: '/pricing/' },
 };
 
 const included: string[] = [
+  'Unlimited companies, devices & financial years',
+  'Switch machines and your books sync automatically — no backup files to carry',
   'Full double-entry accounting & vouchers',
   'Complete GST suite — GSTR-1, GSTR-3B, e-invoice, e-way bill',
   'Inventory, multi-warehouse & job-work',
@@ -21,8 +23,7 @@ const included: string[] = [
   'Role-based access control (5 roles)',
   'AES-256 encrypted local data',
   'Optional encrypted cloud sync & backup',
-  'Multiple companies & financial years',
-  'Automatic background updates',
+  'All future updates included',
 ];
 
 // The lifecycle the SHIPPED APP enforces (see site.ts `plan` — mirrored from
@@ -47,6 +48,15 @@ const lifecycle = [
 ] as const;
 
 const faqs: FaqItem[] = [
+  {
+    question: 'How much does it cost, and is GST included?',
+    answer: `One plan: ₹${plan.price?.toLocaleString('en-IN')} per year, plus ${plan.gstPercent}% GST — ₹${priceInclusiveGst()?.toLocaleString('en-IN')} all-in. As a registered business you can claim that GST as input tax credit. It covers unlimited companies, unlimited devices and every feature; there is nothing else to buy.`,
+  },
+  {
+    question: 'Do I pay per device or per computer?',
+    answer:
+      'No. The subscription is per business, not per machine. Install on as many computers as you like — your laptop, the shop counter, your accountant’s PC — and cloud sync keeps them in step. This is the part Tally makes you work for: there, moving to another computer means surrendering the licence and restoring a backup by hand. Here you just sign in and your books are there.',
+  },
   {
     question: 'What do I get during the free trial?',
     answer: `Everything. The ${plan.trialDays}-day trial is the complete product — full accounting, the entire GST suite, inventory, every report, cloud sync, all of it. There is no cut-down "trial edition", and no feature is held back to force an upgrade. No credit card is needed to start.`,
@@ -80,6 +90,7 @@ const faqs: FaqItem[] = [
 export default function PricingPage() {
   const windows = downloads.windows;
   const priceKnown = plan.price !== null;
+  const inclusive = priceInclusiveGst();
 
   return (
     <>
@@ -91,12 +102,12 @@ export default function PricingPage() {
             <Badge tone="brand">Pricing</Badge>
             <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-[var(--fg)] sm:text-5xl">
               One plan.{' '}
-              <span className="text-gradient">Every feature. {plan.trialDays} days free.</span>
+              <span className="text-gradient">Every feature, every device.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[var(--fg-muted)]">
-              No editions, no feature paywall, no cut-down &ldquo;lite&rdquo; version. Start with a{' '}
-              {plan.trialDays}-day trial of the complete product — and keep reading your books
-              forever, whatever you decide after that.
+              No editions, no per-seat maths, no cut-down &ldquo;lite&rdquo; version. Unlimited
+              companies and devices that sync themselves, starting with a {plan.trialDays}-day free
+              trial — and your books stay readable forever, whatever you decide after that.
             </p>
           </div>
         </Container>
@@ -111,7 +122,7 @@ export default function PricingPage() {
               <div className="mt-5 flex items-baseline justify-center gap-2">
                 {priceKnown ? (
                   <>
-                    <span className="font-display text-5xl font-extrabold tracking-tight text-[var(--fg)] sm:text-6xl">
+                    <span className="font-display text-5xl font-extrabold tracking-tight tabular-nums text-[var(--fg)] sm:text-6xl">
                       ₹{plan.price?.toLocaleString('en-IN')}
                     </span>
                     <span className="text-lg text-[var(--fg-muted)]">/ {plan.period}</span>
@@ -122,11 +133,20 @@ export default function PricingPage() {
                   </span>
                 )}
               </div>
-              <p className="mt-3 text-[var(--fg-muted)]">
-                {priceKnown
-                  ? `${plan.trialDays}-day free trial · no credit card to start`
-                  : 'Subscription pricing is being finalised — we will publish it here before it takes effect.'}
-              </p>
+              {priceKnown ? (
+                <p className="mt-3 text-[var(--fg-muted)]">
+                  + {plan.gstPercent}% GST ·{' '}
+                  <span className="tabular-nums">
+                    ₹{inclusive?.toLocaleString('en-IN')}
+                  </span>{' '}
+                  all-in. Starts after your {plan.trialDays}-day free trial — no card to begin.
+                </p>
+              ) : (
+                <p className="mt-3 text-[var(--fg-muted)]">
+                  Subscription pricing is being finalised — we will publish it here before it takes
+                  effect.
+                </p>
+              )}
             </div>
 
             <div className="px-8 py-8 sm:px-10">
@@ -143,7 +163,7 @@ export default function PricingPage() {
               </ul>
 
               <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                <ButtonLink href="/download/" size="lg">
+                <ButtonLink href="/request-license/" size="lg">
                   <Download className="h-5 w-5" />
                   Start your {plan.trialDays}-day trial
                 </ButtonLink>
@@ -153,7 +173,7 @@ export default function PricingPage() {
                 </ButtonLink>
               </div>
               <p className="mt-5 text-center text-sm text-[var(--fg-subtle)]">
-                {windows.sizeHint} · No credit card required · macOS and Linux coming soon.
+                {windows.sizeHint} · No card to start the trial · macOS and Linux coming soon.
               </p>
             </div>
           </div>
