@@ -1,0 +1,87 @@
+name: Deploy
+
+# Builds the static export and rsyncs it to the VPS web root. Runs after code
+# lands on master (i.e. after a PR merges). CI (ci.yml) is the authoritative
+# typecheck/build gate; this workflow assumes master is green and just ships it.
+#
+# It touches ONLY this site's web root on the shared box. It never goes near the
+# sync server, acronix.in, the whatsapp containers, or the /updates/ directory
+# (installer artifacts live there and must survive a site redeploy — see
+# docs/deploy.md).
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'client/**'
+      - '.github/workflows/deploy.yml'
+      - 'deploy/**'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Off until the box is ready. Set repository variable DEPLOY_ENABLED=true
+    # (Settings → Secrets and variables → Actions → Variables) once DNS points at
+    # the VPS, the nginx site + TLS are up, and the VPS_* secrets exist. Until
+    # then this job is skipped — so merging it never fires a deploy at an
+    # unconfigured box and never reds-out master. See docs/deploy.md.
+    if: vars.DEPLOY_ENABLED == 'true'
+    defaults:
+      run:
+        working-directory: client
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: client/package.json
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: client/pnpm-lock.yaml
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static export
+        run: pnpm build
+
+      - name: Deploy to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          # The directory nginx serves as the site root. The /updates/ directory
+          # is deliberately NOT under this path, so --delete below cannot remove
+          # the installer or latest.yml.
+          WEB_ROOT: /var/www/acronixbooks.com
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # TOFU host key. To pin it instead, store the output of
+          # `ssh-keyscan acronixbooks.com` as a secret and echo it here.
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          # Trailing slash on the source copies the CONTENTS of out/ into the
+          # web root. --delete keeps the root a clean mirror of the build.
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes" \
+            out/ "${VPS_USER}@${VPS_HOST}:${WEB_ROOT}/"
+          rm -f ~/.ssh/deploy_key
+
+      - name: Smoke test
+        run: |
+          set -e
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://acronixbooks.com/)
+          echo "https://acronixbooks.com/ -> $code"
+          test "$code" = "200"
