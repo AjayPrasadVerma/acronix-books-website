@@ -1,4 +1,4 @@
-import { site, updateFeed } from '@/lib/site';
+import { plan, site, updateFeed } from '@/lib/site';
 
 // Structured data for rich results. Organization + WebSite + SoftwareApplication
 // are rendered site-wide; page-specific schemas (Article, BreadcrumbList) are
@@ -40,10 +40,14 @@ export function JsonLd() {
         softwareVersion: site.currentVersion,
         downloadUrl: updateFeed.windowsInstaller,
         description: site.description,
+        // Derived from the single source of truth so the structured data can
+        // never disagree with the pricing page. Schema.org `price` is the
+        // pre-tax amount; a free-trial Offer would be a separate node if needed.
         offers: {
           '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'INR',
+          price: String(plan.price ?? 0),
+          priceCurrency: plan.currency,
+          category: 'annual subscription',
         },
         publisher: { '@id': `${site.url}/#organization` },
       },

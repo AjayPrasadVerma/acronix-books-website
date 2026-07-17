@@ -93,14 +93,25 @@ export const plan = {
    */
   graceDays: 7,
   /**
-   * `null` until the real number is decided — the UI renders an honest
-   * "pricing to be announced" instead of a placeholder figure. Never put a
-   * speculative price here; people make purchasing decisions on this page.
+   * The subscription price, EXCLUSIVE of GST. `null` renders an honest
+   * "pricing to be announced"; a number publishes the plan. People make
+   * purchasing decisions on this page — never put a speculative figure here.
    */
-  price: null as number | null,
+  price: 11999 as number | null,
   currency: 'INR',
   period: 'year',
+  /**
+   * GST is charged ON TOP of `price` (software is 18%). Buyers here are
+   * GST-registered and claim input credit, so the page must show the tax
+   * explicitly and the all-in figure — never bury it. The inclusive total is
+   * derived (see priceInclusiveGst), never hardcoded, so it cannot drift.
+   */
+  gstPercent: 18,
 } as const;
+
+/** All-in price a buyer actually pays (price + GST), rounded to the rupee. */
+export const priceInclusiveGst = (): number | null =>
+  plan.price === null ? null : Math.round(plan.price * (1 + plan.gstPercent / 100));
 
 export type Platform = 'windows' | 'mac' | 'linux' | 'unknown';
 
