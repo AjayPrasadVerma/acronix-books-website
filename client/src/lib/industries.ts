@@ -73,6 +73,13 @@ export interface Industry {
   capabilities: IndustryCapability[];
   /** Short scannable strip of the modules that matter most here. */
   highlights: string[];
+  /**
+   * Per-trade FAQ. Optional while the 20 entries are enriched one at a time —
+   * the template renders the section only when present, so a not-yet-written
+   * entry still builds. Rendered with the shared Faq component, which emits
+   * FAQPage JSON-LD, so each answer is also a rich-result candidate.
+   */
+  faqs?: { question: string; answer: string }[];
 }
 
 export const industries: Industry[] = [
@@ -139,6 +146,38 @@ export const industries: Industry[] = [
       'Job Work Rates',
       'Stock Journals',
       'Multi-warehouse',
+    ],
+    faqs: [
+      {
+        question: 'Can Acronix track greige sent to a processor and returned as finished fabric?',
+        answer:
+          'Yes. A delivery challan moves the goods out without posting a sale or touching your GST turnover, and the material stays on your books as your stock while it sits at the dyer or printer. When it comes back you receive it in, and the Party Stock report shows, at any moment, exactly what is lying with which processor versus what is in your own godown.',
+      },
+      {
+        question: 'Does it handle the §143 job-work return window?',
+        answer:
+          'The Job Work Register tracks every job-work movement against its statutory return window, so your outstanding exposure per job worker is a report you open rather than a total you reconstruct from a notebook. You see what has crossed the window and what is approaching it.',
+      },
+      {
+        question: 'Every processor charges a different rate per process and quality. Is that painful?',
+        answer:
+          'No. You keep a rate per job worker and process, and the purchase form pulls the right rate in automatically, so the voucher matches the rate card without re-keying it on every entry.',
+      },
+      {
+        question: 'Can it bill in metres and also track in than or thaan?',
+        answer:
+          'Items carry a unit of measure and Acronix keeps quantity and value in that unit through stock movements and reports. Set the unit that matches how you actually trade the cloth.',
+      },
+      {
+        question: 'Is GST — GSTR-1, e-invoice, e-way bill — included for a textile trader?',
+        answer:
+          'Yes, in the single plan. HSN-wise summaries, GSTR-1 and GSTR-3B, e-invoice (IRN) and e-way bill all work from the same vouchers you already entered, with nothing re-keyed into a separate return tool.',
+      },
+      {
+        question: 'Does it work offline in a Surat market where the connection drops?',
+        answer:
+          'Acronix is offline-first: the app runs entirely on your machine and never needs the internet to bill, post or report. Cloud sync is an optional backup you switch on, not a requirement — a dropped line never stops a dispatch.',
+      },
     ],
   },
   {

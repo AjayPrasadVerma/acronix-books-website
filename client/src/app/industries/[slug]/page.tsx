@@ -8,6 +8,9 @@ import {
   RelatedLinks,
   TrialCta,
 } from '@/components/marketing/sections';
+import { ProductShowcase } from '@/components/marketing/ProductShowcase';
+import { ComparisonStrip } from '@/components/marketing/ComparisonStrip';
+import { Faq } from '@/components/site/Faq';
 import { industries, industryBySlug } from '@/lib/industries';
 
 // ONE template for every industry — content comes from lib/industries.ts, and
@@ -70,6 +73,19 @@ export default async function IndustryPage({ params }: Params) {
         description="Everything below is in the build you can download today."
         items={industry.capabilities}
       />
+
+      <ProductShowcase />
+
+      <ComparisonStrip />
+
+      {industry.faqs && industry.faqs.length > 0 && (
+        <Faq
+          items={industry.faqs}
+          eyebrow="Questions"
+          title={`${industry.name} — questions, answered`}
+          className="border-b border-[var(--border)] py-20 sm:py-24"
+        />
+      )}
 
       <RelatedLinks
         title="Other trades we build for"
