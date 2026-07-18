@@ -50,7 +50,6 @@ export default async function IndustryPage({ params }: Params) {
         highlight={industry.highlight}
         intro={industry.intro}
         chips={industry.highlights}
-        icon={industry.icon}
         breadcrumbs={
           <Breadcrumbs
             items={[
