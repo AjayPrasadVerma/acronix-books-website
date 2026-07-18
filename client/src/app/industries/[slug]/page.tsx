@@ -8,7 +8,6 @@ import {
   RelatedLinks,
   TrialCta,
 } from '@/components/marketing/sections';
-import { ProductShowcase } from '@/components/marketing/ProductShowcase';
 import { ComparisonStrip } from '@/components/marketing/ComparisonStrip';
 import { Faq } from '@/components/site/Faq';
 import { industries, industryBySlug } from '@/lib/industries';
@@ -51,6 +50,7 @@ export default async function IndustryPage({ params }: Params) {
         highlight={industry.highlight}
         intro={industry.intro}
         chips={industry.highlights}
+        icon={industry.icon}
         breadcrumbs={
           <Breadcrumbs
             items={[
@@ -73,8 +73,6 @@ export default async function IndustryPage({ params }: Params) {
         description="Everything below is in the build you can download today."
         items={industry.capabilities}
       />
-
-      <ProductShowcase />
 
       <ComparisonStrip />
 

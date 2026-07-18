@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Check, Download } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Badge } from '@/components/ui/Primitives';
 import { ButtonLink } from '@/components/ui/Button';
@@ -21,6 +22,7 @@ export function MarketingHero({
   chips,
   breadcrumbs,
   primaryCta,
+  icon: Icon,
 }: {
   eyebrow: string;
   headline: string;
@@ -29,43 +31,99 @@ export function MarketingHero({
   chips: readonly string[];
   breadcrumbs?: React.ReactNode;
   primaryCta?: { label: string; href: string };
+  /**
+   * When provided, the hero becomes two-column and the right side renders a
+   * branded visual panel built from this icon + `chips` (the trade's real
+   * modules). It fills what was empty space on wide screens without a
+   * fabricated photo — the panel is generated from real data, so it is
+   * automatically per-page and honest.
+   */
+  icon?: LucideIcon;
 }) {
+  const hasVisual = Boolean(Icon);
+  const cta = (
+    <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+      <ButtonLink href={primaryCta?.href ?? '/download/'} size="lg">
+        <Download className="h-5 w-5" />
+        {primaryCta?.label ?? `Start your ${plan.trialDays}-day trial`}
+      </ButtonLink>
+      <ButtonLink href="/features/" variant="outline" size="lg">
+        Explore every feature
+        <ArrowRight className="h-5 w-5" />
+      </ButtonLink>
+    </div>
+  );
+
   return (
     <section className="relative overflow-hidden border-b border-[var(--border)]">
       <div className="bg-grid pointer-events-none absolute inset-0 -z-10" aria-hidden />
       <Container size="wide" className="py-16 sm:py-20">
         {breadcrumbs}
-        <div className={breadcrumbs ? 'mt-8 max-w-3xl' : 'max-w-3xl'}>
-          <Badge tone="brand">{eyebrow}</Badge>
-          <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-[var(--fg)] sm:text-5xl">
-            {headline} <span className="text-gradient">{highlight}</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--fg-muted)]">{intro}</p>
+        <div
+          className={`${breadcrumbs ? 'mt-8 ' : ''}${
+            hasVisual ? 'grid items-center gap-12 lg:grid-cols-2' : 'max-w-3xl'
+          }`}
+        >
+          {/* Left — copy */}
+          <div className={hasVisual ? 'max-w-xl' : ''}>
+            <Badge tone="brand">{eyebrow}</Badge>
+            <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-[var(--fg)] sm:text-5xl">
+              {headline} <span className="text-gradient">{highlight}</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--fg-muted)]">{intro}</p>
 
-          {chips.length > 0 && (
-            <ul className="mt-8 flex flex-wrap gap-2">
-              {chips.map((c) => (
-                <li
-                  key={c}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-1.5 text-sm font-medium text-[var(--fg-muted)]"
-                >
-                  <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden />
-                  {c}
-                </li>
-              ))}
-            </ul>
-          )}
+            {/* When there's no visual panel, chips live here as a strip. With a
+                panel, they move into it (below) so they aren't shown twice. */}
+            {!hasVisual && chips.length > 0 && (
+              <ul className="mt-8 flex flex-wrap gap-2">
+                {chips.map((c) => (
+                  <li
+                    key={c}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-1.5 text-sm font-medium text-[var(--fg-muted)]"
+                  >
+                    <Check
+                      className="h-4 w-4 text-emerald-600 dark:text-emerald-400"
+                      aria-hidden
+                    />
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            )}
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={primaryCta?.href ?? '/download/'} size="lg">
-              <Download className="h-5 w-5" />
-              {primaryCta?.label ?? `Start your ${plan.trialDays}-day trial`}
-            </ButtonLink>
-            <ButtonLink href="/features/" variant="outline" size="lg">
-              Explore every feature
-              <ArrowRight className="h-5 w-5" />
-            </ButtonLink>
+            {cta}
           </div>
+
+          {/* Right — branded visual panel, built from the icon + real modules */}
+          {hasVisual && Icon && (
+            <div className="relative hidden lg:block">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-4 -z-10 bg-gradient-to-br from-brand-500/15 via-brand-500/5 to-transparent blur-2xl"
+              />
+              <div className="rounded-3xl border border-[var(--border)] bg-[var(--bg-elevated)] p-8 shadow-xl shadow-ink-950/5">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-lg shadow-brand-600/25">
+                  <Icon className="h-8 w-8" aria-hidden />
+                </div>
+                <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-[var(--fg-subtle)]">
+                  What&apos;s inside for {eyebrow}
+                </p>
+                <ul className="mt-4 space-y-2.5">
+                  {chips.map((c) => (
+                    <li key={c} className="flex items-center gap-3">
+                      <span className="flex h-6 w-6 flex-none items-center justify-center rounded-md border border-brand-500/20 bg-brand-50 dark:bg-brand-400/10">
+                        <Check
+                          className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400"
+                          aria-hidden
+                        />
+                      </span>
+                      <span className="text-sm font-medium text-[var(--fg)]">{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       </Container>
     </section>
