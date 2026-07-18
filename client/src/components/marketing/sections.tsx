@@ -33,17 +33,21 @@ export function MarketingHero({
   return (
     <section className="relative overflow-hidden border-b border-[var(--border)]">
       <div className="bg-grid pointer-events-none absolute inset-0 -z-10" aria-hidden />
-      <Container size="wide" className="py-16 sm:py-20">
-        {breadcrumbs}
-        <div className={breadcrumbs ? 'mt-8 max-w-3xl' : 'max-w-3xl'}>
+      <Container size="wide" className="py-16 sm:py-24">
+        {breadcrumbs && <div className="mb-8 flex justify-center">{breadcrumbs}</div>}
+        {/* Single-column, centred — no dead space on the right, no placeholder
+            visual. A real per-trade image can move in here later if supplied. */}
+        <div className="mx-auto max-w-3xl text-center">
           <Badge tone="brand">{eyebrow}</Badge>
           <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-[var(--fg)] sm:text-5xl">
             {headline} <span className="text-gradient">{highlight}</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--fg-muted)]">{intro}</p>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[var(--fg-muted)]">
+            {intro}
+          </p>
 
           {chips.length > 0 && (
-            <ul className="mt-8 flex flex-wrap gap-2">
+            <ul className="mt-8 flex flex-wrap justify-center gap-2">
               {chips.map((c) => (
                 <li
                   key={c}
@@ -56,7 +60,7 @@ export function MarketingHero({
             </ul>
           )}
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
             <ButtonLink href={primaryCta?.href ?? '/download/'} size="lg">
               <Download className="h-5 w-5" />
               {primaryCta?.label ?? `Start your ${plan.trialDays}-day trial`}
