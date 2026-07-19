@@ -38,7 +38,7 @@ import { DownloadFaq } from '@/components/download/DownloadFaq';
 export const metadata: Metadata = {
   title: 'Download',
   description:
-    'Download Acronix Books free for Windows — a fast, offline-first GST accounting & ERP desktop app for Indian businesses of every size. GST-ready invoicing, inventory and vouchers, encrypted at rest. macOS and Linux coming soon.',
+    'Download Acronix Books free for Windows and Linux — a fast, offline-first GST accounting & ERP desktop app for Indian businesses of every size. GST-ready invoicing, inventory and vouchers, encrypted at rest. macOS coming soon.',
   alternates: { canonical: '/download/' },
 };
 
@@ -261,7 +261,7 @@ export default function DownloadPage() {
             align="left"
             eyebrow="Choose your platform"
             title="One install, keeps itself current"
-            description="Windows is available today. macOS and Linux are in the pipeline — leave your email and we'll tell you the moment they land."
+            description="Windows and Linux are available today. macOS is in the pipeline — leave your email and we'll tell you the moment it lands."
             className="max-w-2xl"
           />
           <div className="mt-10">

@@ -540,7 +540,7 @@ const faqs: FaqItem[] = [
   {
     question: 'What are the system requirements and which operating systems are supported?',
     answer:
-      'Acronix Books is a desktop application. Windows 10 and 11 (64-bit) are supported today with a one-click installer of roughly 80 MB. macOS and Linux builds are in the pipeline and coming soon.\n\nBecause it runs locally, it is comfortable on ordinary business hardware and scales to 50,000+ vouchers per financial year without slowing down.',
+      'Acronix Books is a desktop application. Windows 10 and 11 (64-bit) are supported today with a one-click installer of roughly 80 MB, and Linux ships as a universal AppImage plus a .deb for Debian and Ubuntu. The macOS build is in the pipeline and coming soon.\n\nBecause it runs locally, it is comfortable on ordinary business hardware and scales to 50,000+ vouchers per financial year without slowing down.',
   },
   {
     question: 'How do updates work?',

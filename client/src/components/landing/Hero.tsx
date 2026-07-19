@@ -54,7 +54,7 @@ export function Hero() {
             </ButtonLink>
           </div>
           <p className="animate-fade-up mt-3 text-sm text-[var(--fg-subtle)]">
-            {plan.trialDays}-day trial, no card · {win.sizeHint} · macOS &amp; Linux coming soon.
+            {plan.trialDays}-day trial, no card · Windows &amp; Linux · macOS coming soon.
             Activates with a License Number we issue — by{' '}
             <Link href="/terms/" className="underline underline-offset-2 hover:text-[var(--fg)]">
               Terms

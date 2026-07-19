@@ -103,6 +103,14 @@ function PlatformCard({
               <Download className="h-4 w-4" aria-hidden="true" />
               Download for {target.label}
             </ButtonLink>
+            {target.altHref && (
+              <a
+                href={target.altHref}
+                className="mt-2 block text-center text-xs font-medium text-brand-600 underline underline-offset-2 hover:text-brand-700 dark:text-brand-400"
+              >
+                {target.altLabel ?? 'Other format'}
+              </a>
+            )}
             <p className="mt-2 text-center text-xs text-[var(--fg-subtle)]">
               Free · No account required
             </p>

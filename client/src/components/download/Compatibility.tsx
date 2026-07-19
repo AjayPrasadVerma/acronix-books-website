@@ -15,9 +15,14 @@ const notes: Note[] = [
     body: 'The current build targets 64-bit Windows 10 and 11 — the versions on the vast majority of office PCs today. It runs comfortably on everyday hardware from 4 GB RAM upward and needs only about 200 MB of disk for the app and your data. 32-bit Windows is not supported.',
   },
   {
+    icon: MonitorCheck,
+    title: 'Linux (AppImage & .deb)',
+    body: 'Linux is available today as a universal AppImage that runs on most distributions with no installation, plus a .deb for Debian and Ubuntu. It runs on the same everyday hardware as the Windows build.',
+  },
+  {
     icon: Clock,
-    title: 'macOS & Linux status',
-    body: 'macOS (Apple Silicon and Intel) and Linux (AppImage and .deb) builds are actively in the pipeline but not released yet. Leave your email on the platform cards above and we will notify you the moment each one is available to download.',
+    title: 'macOS status',
+    body: 'The macOS build (Apple Silicon and Intel) is actively in the pipeline but not released yet. Leave your email on the platform cards above and we will notify you the moment it is available to download.',
   },
   {
     icon: FileArchive,

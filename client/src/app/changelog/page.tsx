@@ -169,8 +169,8 @@ const ROADMAP: { icon: LucideIcon; title: string; body: string }[] = [
   },
   {
     icon: MonitorDown,
-    title: 'macOS & Linux builds',
-    body: 'Native desktop builds beyond Windows — Apple Silicon, Intel and Linux.',
+    title: 'macOS build',
+    body: 'A native macOS build for Apple Silicon and Intel, joining the Windows and Linux releases.',
   },
 ];
 

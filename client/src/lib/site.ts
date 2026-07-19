@@ -67,6 +67,12 @@ export const updateFeed = {
   base: 'https://acronixbooks.com/updates',
   manifest: 'https://acronixbooks.com/updates/latest.yml',
   windowsInstaller: 'https://acronixbooks.com/updates/AcronixBooks-Setup-latest.exe',
+  // Linux ships two artifacts: a universal AppImage (primary — runs on most
+  // distros, and the only one electron-updater can auto-update) and a .deb for
+  // Debian/Ubuntu. These URLs are the contract the desktop electron-builder
+  // `publish` config must match when the installer step uploads them.
+  linuxAppImage: 'https://acronixbooks.com/updates/AcronixBooks-latest.AppImage',
+  linuxDeb: 'https://acronixbooks.com/updates/AcronixBooks-latest.deb',
 } as const;
 
 /**
@@ -122,6 +128,9 @@ export interface DownloadTarget {
   sizeHint: string;
   /** `null` when the artifact isn't built yet (Coming soon). */
   href: string | null;
+  /** Optional second format for the same OS (e.g. Linux .deb under the AppImage). */
+  altHref?: string | null;
+  altLabel?: string;
   status: 'available' | 'coming-soon';
   note: string;
 }
@@ -146,10 +155,12 @@ export const downloads: Record<Exclude<Platform, 'unknown'>, DownloadTarget> = {
   linux: {
     platform: 'linux',
     label: 'Linux',
-    sizeHint: 'AppImage · .deb',
-    href: null,
-    status: 'coming-soon',
-    note: 'In the pipeline — leave your email to be notified at launch.',
+    sizeHint: 'AppImage · .deb · 64-bit',
+    href: updateFeed.linuxAppImage,
+    altHref: updateFeed.linuxDeb,
+    altLabel: 'Download .deb (Debian / Ubuntu)',
+    status: 'available',
+    note: 'AppImage runs on most distributions and auto-updates itself; a .deb is provided for Debian and Ubuntu.',
   },
 };
 

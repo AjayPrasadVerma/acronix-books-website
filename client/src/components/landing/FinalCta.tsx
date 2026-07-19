@@ -13,7 +13,7 @@ export function FinalCta() {
             Start keeping faster, safer books today
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-[var(--fg-muted)]">
-            Free to download while in early access. Windows now — macOS &amp; Linux coming soon.
+            Free to download while in early access. Windows &amp; Linux now — macOS coming soon.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <ButtonLink href="/download/" size="lg">
