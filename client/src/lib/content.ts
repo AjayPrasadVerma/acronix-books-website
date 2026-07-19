@@ -70,6 +70,18 @@ function str(value: unknown, fallback: string): string {
   return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
 }
 
+// gray-matter parses an UNQUOTED YAML `date: 2026-06-30` into a JS Date object,
+// not a string — so `str()` rejected it and every post fell back to the
+// 1970-01-01 sentinel (breaking sitemap lastmod and the displayed post date).
+// Accept either form and normalise to an ISO date (YYYY-MM-DD).
+function dateStr(value: unknown, fallback: string): string {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  if (typeof value === 'string' && value.trim().length > 0) return value.trim();
+  return fallback;
+}
+
 function num(value: unknown, fallback: number): number {
   if (typeof value === 'number' && Number.isFinite(value)) return value;
   if (typeof value === 'string') {
@@ -136,7 +148,7 @@ function toPostMeta(slug: string, data: unknown, content: string): PostMeta {
     slug,
     title: str(fm.title, slug),
     description: str(fm.description, ''),
-    date: str(fm.date, '1970-01-01'),
+    date: dateStr(fm.date, '1970-01-01'),
     author: str(fm.author, 'Acronix Books Team'),
     tags: strArray(fm.tags),
     readingMinutes: Math.max(1, Math.ceil(countWords(content) / 200)),
