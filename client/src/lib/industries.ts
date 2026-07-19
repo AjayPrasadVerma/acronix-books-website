@@ -244,6 +244,38 @@ export const industries: Industry[] = [
       'Ageing reports',
       'Keyboard-first',
     ],
+    faqs: [
+      {
+        question: 'Can I see which specific bill a party has not paid, instead of just their total balance?',
+        answer:
+          'Yes. Every invoice becomes its own bill and every receipt is allocated against the specific bills it clears, so outstanding is per-bill and per-age from day one. You open a party and see a list of dates, amounts and how old each unpaid bill is — not one lump sum that hides which invoice is ninety days late.',
+      },
+      {
+        question: 'Where do I record a party\'s credit limit and credit days?',
+        answer:
+          'Both sit on the party\'s ledger master, so the terms you agreed are stored where the party is rather than in whoever has been at the counter longest. The ageing and outstanding reports then show that party\'s exposure against those terms before you load the next truck.',
+      },
+      {
+        question: 'Can I generate e-way bills and e-invoices without retyping the invoice into a portal?',
+        answer:
+          'Yes. The e-way bill and e-invoice payloads are generated straight from the voucher that created the movement, so the document is built from data you already entered instead of being keyed a second time into a government site.',
+      },
+      {
+        question: 'Does it show godown-wise stock, not just a total?',
+        answer:
+          'Stock is tracked per warehouse with real movements and valuation layers behind it, so the position in each godown is a report you open rather than a figure you estimate before making a promise you may not be able to keep.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B, e-invoice — included in the plan?',
+        answer:
+          'Yes, in the single plan. GSTR-1, GSTR-3B, HSN-wise summaries, e-invoice (IRN) and e-way bill all read the same vouchers you raised while billing, with nothing re-entered into a separate return tool.',
+      },
+      {
+        question: 'Does dispatch stop if the internet goes down?',
+        answer:
+          'No. Acronix is offline-first — the book is a local encrypted database, so billing, posting and reporting all run on your machine with no connection required. Optional cloud backup catches up when the line returns; a dropped connection never stops a dispatch.',
+      },
+    ],
   },
   {
     slug: 'manufacturing',
@@ -308,6 +340,38 @@ export const industries: Industry[] = [
       'Job work',
       'Multi-warehouse',
       'Audit trail',
+    ],
+    faqs: [
+      {
+        question: 'How do I record raw material consumed and finished goods produced?',
+        answer:
+          'Through a stock journal — a single two-legged voucher where the material you consumed leaves stock and the finished goods you made arrive in stock, without inventing a customer or a supplier to explain the movement. You enter what actually went in and what actually came out, so production is modelled as the real stock event it is.',
+      },
+      {
+        question: 'Can different items use different valuation methods?',
+        answer:
+          'Yes. You set a company default of FIFO or weighted-average and override it per item, because a fast consumable and a costly component genuinely need different answers. Valuation layers are written on every inward movement even in weighted-average mode, so switching an item\'s method later never needs a backfill.',
+      },
+      {
+        question: 'Do I know my cost of goods sold during the year, or only at year end?',
+        answer:
+          'Cost of goods sold is posted as you go, not reconstructed at closing. Perpetual inventory and COGS mean margin is a number you can look at in month three rather than a surprise at the audit.',
+      },
+      {
+        question: 'Can I track goods sent out for a sub-contracted process?',
+        answer:
+          'Yes. Job work tracking follows goods sent out for processing, the rate agreed per job worker, and the §143 statutory return exposure — all as reports you open rather than reminders you keep in a notebook.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B, e-invoice, e-way bill — included?',
+        answer:
+          'Yes, in the single plan. All of them read the same vouchers you already posted, including HSN-wise summaries, so there is no separate re-entry of your production and sales into a return tool.',
+      },
+      {
+        question: 'Are posted vouchers safe from being quietly edited later?',
+        answer:
+          'Posted vouchers never mutate — corrections happen through reversal vouchers, not by overwriting history. Every privileged action lands in a tamper-evident, hash-chained audit log, so an out-of-app edit to the file is detectable.',
+      },
     ],
   },
   {
@@ -374,6 +438,38 @@ export const industries: Industry[] = [
       'Day book',
       'Encrypted books',
     ],
+    faqs: [
+      {
+        question: 'Does billing keep working when the broadband goes down?',
+        answer:
+          'Yes. Acronix is offline-first by architecture — the book is a local encrypted SQLite database, not a web session — so billing, printing and reporting continue right through an outage. Optional cloud backup syncs when the connection returns.',
+      },
+      {
+        question: 'Is it fast enough for a queue at the counter?',
+        answer:
+          'It is built to be run without a mouse: function keys per module, Enter to advance, Esc to back out, Ctrl+K for anything, and a sub-200ms target on common actions. Type, Enter, print, next — the software is meant to disappear while you bill.',
+      },
+      {
+        question: 'Does the invoice update my stock automatically?',
+        answer:
+          'Yes. An invoice moves stock, posts the ledger and creates the bill in a single transaction that is whole or nothing, so the shelf and the report cannot drift apart the way they do when billing and stock are separate steps.',
+      },
+      {
+        question: 'Do GST returns come out of the billing I already did?',
+        answer:
+          'Yes. GSTR-1, GSTR-3B, HSN-wise summaries and e-invoice all read the same vouchers you raised at the counter, so the return is a report rather than a re-entry exercise on the 10th.',
+      },
+      {
+        question: 'Can I see the day\'s cash and bank position?',
+        answer:
+          'The day book and cash/bank reports show what came in, what went out and what is in the drawer and the bank. They aggregate in SQL, so they stay instant even as years of billing pile up behind them.',
+      },
+      {
+        question: 'Is my data safe if someone copies the file off the shop PC?',
+        answer:
+          'The database file is SQLCipher (AES-256) encrypted. Copied to a pen drive it is unreadable bytes, so your turnover is not casually browsable by whoever borrows the computer.',
+      },
+    ],
   },
   {
     slug: 'services',
@@ -431,6 +527,38 @@ export const industries: Industry[] = [
       'Multi-company',
       'Role-based access',
     ],
+    faqs: [
+      {
+        question: 'Can I raise an invoice without walking through stock and quantity fields?',
+        answer:
+          'Yes. Items live in one master with a stock flag — turn it off and the item behaves as a service, with no quantity tracking, no valuation and no warehouse. The form stops asking for the things a service does not have.',
+      },
+      {
+        question: 'Does GST work for a service business, including place of supply and reverse charge?',
+        answer:
+          'Yes. GSTR-1, GSTR-3B, e-invoicing and the tax registers work identically for services, driven by the same vouchers with a tax category per item. Nothing about GST gets simpler because nothing moved on a truck, and none of it is left out.',
+      },
+      {
+        question: 'Can I track which invoices are still unpaid, bill by bill?',
+        answer:
+          'Yes. Every invoice is a bill and every receipt allocates against specific bills, so ageing and outstanding are per-invoice — which is exactly the cash-flow view a business with no stock to sell actually needs.',
+      },
+      {
+        question: 'Can I run more than one entity from a single install?',
+        answer:
+          'Multi-company is there from day one, with data separated by company and access governed by role — useful when the practice and a trading arm are different books kept by the same people.',
+      },
+      {
+        question: 'What financial reports can I give the auditor?',
+        answer:
+          'Trial Balance, P&L, Balance Sheet and Cash Flow, all aggregated in SQL and exportable to PDF or Excel.',
+      },
+      {
+        question: 'Does it run offline?',
+        answer:
+          'Yes. The book is a local encrypted database and the whole app runs on your machine without the internet. Cloud sync is an optional backup you switch on, not a requirement to bill or report.',
+      },
+    ],
   },
   {
     slug: 'ecommerce',
@@ -439,11 +567,11 @@ export const industries: Industry[] = [
     icon: ShoppingCart,
     title: 'Accounting Software for E-commerce Sellers',
     description:
-      'Keep GST-compliant, audit-ready books behind your online sales — inventory, HSN-wise summaries, GSTR-1 and GSTR-3B, encrypted locally. Marketplace settlement reconciliation is not included.',
+      'Keep GST-compliant, audit-ready books behind your online sales — inventory, HSN-wise summaries, GSTR-1 and GSTR-3B, all encrypted on your own machine.',
     headline: 'The books behind',
     highlight: 'the storefront',
     intro:
-      'Selling online does not change what the department expects of your books. Acronix keeps the accounting, inventory and GST side clean and auditable — and is candid about the part it does not do.',
+      'Selling online does not change what the department expects of your books. Acronix keeps the accounting, inventory and GST side clean and auditable, so what you file matches what you actually sold.',
     challenges: [
       {
         title: 'Volume makes small errors expensive',
@@ -477,6 +605,38 @@ export const industries: Industry[] = [
       },
     ],
     highlights: ['HSN summaries', 'Credit notes', 'Multi-warehouse', 'GSTR-1 & 3B', 'Encrypted books'],
+    faqs: [
+      {
+        question: 'With hundreds of small orders, how do I keep the GST side clean?',
+        answer:
+          'The tax category and HSN live on the item master, so the rate travels with the product instead of being re-decided per invoice — which is where a rate or HSN mistake replicates across a day\'s orders. HSN-wise summaries come out of the same data.',
+      },
+      {
+        question: 'How are returns handled?',
+        answer:
+          'Returns post as credit notes through the same engine as the sale, reversing stock and the ledger correctly rather than being patched afterwards with a journal. In this trade a return is a routine daily event, so it is a first-class voucher, not an exception.',
+      },
+      {
+        question: 'Can I track stock across more than one location?',
+        answer:
+          'Yes. Multi-warehouse inventory tracks stock per location with proper movements and valuation behind it, so what you can promise online is anchored to what is actually on the shelf in the right place.',
+      },
+      {
+        question: 'Are GSTR-1 and GSTR-3B generated from my sales?',
+        answer:
+          'Yes, in the single plan. Both are generated from your vouchers, with the exports you need for the portal, so the return follows the billing you already did.',
+      },
+      {
+        question: 'Are my books safe on my own machine?',
+        answer:
+          'The database file is SQLCipher (AES-256) encrypted on disk, so a copied file is unreadable bytes. Optional cloud sync is an encrypted backup you switch on, not a requirement.',
+      },
+      {
+        question: 'Does the back-office keep working if the internet drops?',
+        answer:
+          'Yes. Acronix is offline-first — the book runs on your own machine, so posting sales, raising credit notes and pulling reports never wait on a connection. Cloud sync catches up when the line returns.',
+      },
+    ],
   },
   {
     slug: 'education',
@@ -485,7 +645,7 @@ export const industries: Industry[] = [
     icon: GraduationCap,
     title: 'Accounting Software for Schools & Institutes',
     description:
-      'Run a school or institute’s books on a proper double-entry ledger — fee receipts, expense heads, bill-by-bill outstanding, role-based access and audit trail. No student-information or fee-management module.',
+      'Run a school or institute’s books on a proper double-entry ledger — fee receipts, expense heads, bill-by-bill outstanding, role-based access and a full audit trail.',
     headline: 'A school’s books,',
     highlight: 'kept properly',
     intro:
@@ -523,6 +683,38 @@ export const industries: Industry[] = [
       },
     ],
     highlights: ['Receipts & outstanding', 'Role-based access', 'Encrypted books', 'Audit log', 'Financial statements'],
+    faqs: [
+      {
+        question: 'Can I record fee receipts against specific outstanding bills and see what is still due?',
+        answer:
+          'Yes. Every receipt allocates against the specific bills it clears, so "what is still due, against which receipt" — the most-asked question in a school office — is a report you open rather than an argument across three registers.',
+      },
+      {
+        question: 'Can an office clerk record receipts without being able to void them or edit masters?',
+        answer:
+          'Yes. Role-based access runs from Viewer to Owner across five roles, and it is enforced in the backend, not just hidden in the UI. A clerk can take receipts while voids and master edits stay with the roles you reserved them for.',
+      },
+      {
+        question: 'Is the fee data safe on an office computer several people use?',
+        answer:
+          'The database is SQLCipher (AES-256) encrypted on disk, so a file copied off the PC is unreadable bytes. Privileged actions are also written to a hash-chained audit log, which makes an out-of-app edit detectable.',
+      },
+      {
+        question: 'What can I hand the auditor at year end?',
+        answer:
+          'Trial Balance, Income & Expenditure via the P&L, Balance Sheet and Cash Flow, all exportable to PDF or Excel — a proper double-entry set rather than a stack of receipt books.',
+      },
+      {
+        question: 'If we have taxable activities like transport or the sale of uniforms, is GST billing available?',
+        answer:
+          'Yes, in the single plan. The full GST suite — GSTR-1, GSTR-3B, HSN-wise summaries and e-invoice — is there when an institute has taxable supplies to bill, driven by the same vouchers as everything else.',
+      },
+      {
+        question: 'Does it run without the internet?',
+        answer:
+          'Yes. The book is a local encrypted database and the whole app runs offline on the office machine. Cloud sync is an optional encrypted backup, not a requirement to record a receipt.',
+      },
+    ],
   },
   {
     slug: 'grocery',
@@ -531,7 +723,7 @@ export const industries: Industry[] = [
     icon: ShoppingBasket,
     title: 'Billing & Accounting Software for Grocery and Kirana Stores',
     description:
-      'Fast GST billing for a kirana counter, khata credit tracked bill-by-bill, live stock across shop and godown, and books that keep working when the line drops. Honest about what it does not do on expiry.',
+      'Fast GST billing for a kirana counter, khata credit tracked bill-by-bill, live stock across shop and godown, and books that keep working when the line drops.',
     headline: 'Margins this thin leave',
     highlight: 'no room for a guess',
     intro:
@@ -587,6 +779,38 @@ export const industries: Industry[] = [
       'Reorder levels',
       'Offline-first',
       'Keyboard-first',
+    ],
+    faqs: [
+      {
+        question: 'Can I track khata credit bill by bill, so "kitna baaki hai" has real dates behind it?',
+        answer:
+          'Yes. Every credit sale creates a bill and a part-payment allocates against the specific bills it clears, so the answer to "kitna baaki hai" is a list of dates and amounts rather than one running number that hides which month is still unpaid.',
+      },
+      {
+        question: 'Oil, dal and atta land at a different rate each time — does my margin reflect that?',
+        answer:
+          'Set weighted-average as the company default and each new inward lot re-averages the item\'s cost automatically, so margin reflects what the stock actually cost rather than the last rate you happened to type in.',
+      },
+      {
+        question: 'Can I set reorder levels so I know what to re-buy?',
+        answer:
+          'Minimum, maximum and reorder quantities are fields on each item, so the list of what has dropped below its level is data you read rather than a shelf you have to walk.',
+      },
+      {
+        question: 'Does billing work without the internet and without a mouse?',
+        answer:
+          'Yes. The whole app is keyboard-driven — type, Enter, print, next — and the book is a local encrypted database, so a broadband outage is not a shop closure.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B — included?',
+        answer:
+          'Yes, in the single plan. GSTR-1, GSTR-3B, HSN-wise summaries and e-invoice all read the vouchers you raised at the counter, so the return follows the billing you already did.',
+      },
+      {
+        question: 'Can I capture batch and expiry when goods come in?',
+        answer:
+          'Stock journals, delivery challans and the Stock Ledger carry batch number, manufacture date and expiry date, so a dated lot you took in can be traced through the godown as it moves.',
+      },
     ],
   },
   {
@@ -653,6 +877,38 @@ export const industries: Industry[] = [
       'Reorder levels',
       'GSTR-1 & 3B',
     ],
+    faqs: [
+      {
+        question: 'With a few thousand small SKUs, does item search stay fast?',
+        answer:
+          'Yes. Every item carries SKU, barcode and alias fields, and lookups run against indexed local SQLite queries with a sub-50ms target on the hot path — so finding one line out of thousands does not degrade as the catalogue grows.',
+      },
+      {
+        question: 'Notebooks, pens and printers sit at different GST rates — is a mixed bill a problem?',
+        answer:
+          'No. The GST rate and HSN live on the item master, not in the biller\'s memory, so a mixed invoice taxes each line correctly and the HSN-wise summary falls out of the same data.',
+      },
+      {
+        question: 'Can I handle a school or office that buys on a PO and pays in forty-five days?',
+        answer:
+          'Yes. Credit limit and credit days sit on the party\'s ledger master, every receipt allocates bill by bill, and ageing tells you which invoice is past forty-five days rather than what the account owes in total.',
+      },
+      {
+        question: 'Can I plan season stock across shop and back store?',
+        answer:
+          'Multi-warehouse tracking with real movements behind it means the season stock in the back store is a position you can read, and reorder, minimum and maximum levels per item anchor the re-buy to a number you set in a calm month.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B, e-invoice — included?',
+        answer:
+          'Yes, in the single plan. All three read the vouchers you already raised at the counter, so there is no re-entry into a separate return tool.',
+      },
+      {
+        question: 'Does it run offline and by keyboard?',
+        answer:
+          'Yes. The app is fully keyboard-driven and the book is a local encrypted database, so the counter keeps moving through a dropped connection.',
+      },
+    ],
   },
   {
     slug: 'furniture',
@@ -718,6 +974,38 @@ export const industries: Industry[] = [
       'FIFO + weighted-average',
       'Stock journals',
     ],
+    faqs: [
+      {
+        question: 'A piece is sold today but delivered in three weeks — how is that handled?',
+        answer:
+          'A delivery challan moves the stock without posting a single ledger entry, so a piece that has physically left for the customer\'s house before the invoice is raised is accounted for honestly. You convert the challan to a Sale with one key when it becomes one.',
+      },
+      {
+        question: 'Can I keep showroom display stock separate from what I can actually sell?',
+        answer:
+          'Yes. Showroom and godown are separate warehouses with real movements behind them, so display stock lives in its own location and the sellable position is the position you can genuinely promise a buyer.',
+      },
+      {
+        question: 'Where does a booking advance sit until the invoice exists?',
+        answer:
+          'Every receipt allocates against specific bills, so a booking advance lands on the invoice it belongs to when that invoice is raised, instead of floating as an unexplained credit on the party.',
+      },
+      {
+        question: 'Can I generate an e-way bill for a bulky dispatch?',
+        answer:
+          'Yes. The e-way bill payload is generated straight from the voucher that created the movement, rather than the invoice being retyped into a portal by whoever is free.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B, e-invoice — included?',
+        answer:
+          'Yes, in the single plan. All of it reads the same vouchers you raised, with HSN-wise summaries, so there is no separate re-entry.',
+      },
+      {
+        question: 'Can a slow-moving costly piece and a fast accessory be valued differently?',
+        answer:
+          'Yes. Valuation is FIFO or weighted-average as a company default with a per-item override, so a high-value piece and a fast-moving accessory do not have to share the same logic.',
+      },
+    ],
   },
   {
     slug: 'electricals',
@@ -726,7 +1014,7 @@ export const industries: Industry[] = [
     icon: Zap,
     title: 'Accounting Software for Electrical & Hardware Dealers',
     description:
-      'GST billing across a deep multi-brand catalogue, bill-by-bill contractor credit, multi-warehouse stock and e-way bills. Offline-first and keyboard-driven. No serial-number or warranty tracking — stated up front.',
+      'GST billing across a deep multi-brand catalogue, bill-by-bill contractor credit, multi-warehouse stock and e-way bills. Offline-first and keyboard-driven.',
     headline: 'A counter that sells',
     highlight: 'nine paise and nine thousand',
     intro:
@@ -783,6 +1071,38 @@ export const industries: Industry[] = [
       'E-way bill',
       'FIFO + weighted-average',
     ],
+    faqs: [
+      {
+        question: 'A contractor pays after the site bills — can I see which month\'s supply is still unrecovered?',
+        answer:
+          'Yes. Every supply becomes a bill and every part-recovery allocates against specific bills, so ageing shows what is ninety days out per invoice — the conversation you actually need to have, backed by a printed list rather than a party-level lump sum.',
+      },
+      {
+        question: 'The same 16A socket exists from four brands — can I pick the right line fast?',
+        answer:
+          'Yes. SKU, barcode and alias fields on each item, queried against indexed local SQLite, keep lookup fast even at brand-level depth, so the wrong-line margin error is easier to avoid at the counter.',
+      },
+      {
+        question: 'A bill can carry a screw and a switchgear panel at different rates — is that a problem?',
+        answer:
+          'No. Tax category and HSN sit on the item master, so a mixed-rate invoice taxes each line correctly and the HSN-wise summary comes out clean, without deciding tax per invoice.',
+      },
+      {
+        question: 'Can I track wire and heavy items in a separate store from the counter?',
+        answer:
+          'Yes. Shop and store are tracked as separate warehouses with real movements, so "we have it, but not here" is something the software can tell you, and e-way bill payloads are generated from the dispatch voucher.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B, e-invoice — included?',
+        answer:
+          'Yes, in the single plan. All of it reads the vouchers you already raised at the counter, so there is no re-entry into a separate return tool.',
+      },
+      {
+        question: 'Can items whose cost moves with the market use FIFO?',
+        answer:
+          'Yes. Set FIFO on wire and metal where cost genuinely moves and keep weighted-average elsewhere — the choice is per item, not a global switch you inherit for the whole catalogue.',
+      },
+    ],
   },
   {
     slug: 'auto-parts',
@@ -791,7 +1111,7 @@ export const industries: Industry[] = [
     icon: Wrench,
     title: 'Accounting Software for Auto Parts & Spares Dealers',
     description:
-      'Fast part lookup by SKU, barcode or alias, bill-by-bill garage credit, multi-warehouse stock and GST-ready billing — offline-first. No fitment catalogue or supersession chains; that is stated plainly.',
+      'Fast part lookup by SKU, barcode or alias, bill-by-bill garage credit, multi-warehouse stock and GST-ready billing — offline-first.',
     headline: 'The customer is a mechanic',
     highlight: 'holding the old part',
     intro:
@@ -847,6 +1167,38 @@ export const industries: Industry[] = [
       'Stock summary',
       'Multi-warehouse',
       'Offline-first',
+    ],
+    faqs: [
+      {
+        question: 'A customer walks in with a part number — can I find it fast enough?',
+        answer:
+          'Yes. SKU, barcode and alias fields on the item master are queried against a local indexed SQLite database, so the lookup that decides the sale happens with no round trip to a server while the mechanic waits.',
+      },
+      {
+        question: 'Wrong parts go back — to the distributor and from the mechanic. Are both handled?',
+        answer:
+          'Yes. Returns post as credit and debit notes through the same engine as the sale, so stock and the ledger both reverse properly instead of being patched afterwards with a journal nobody can explain at audit.',
+      },
+      {
+        question: 'A garage buys daily and settles monthly — can I reconcile that payment?',
+        answer:
+          'Yes. Each supply is a bill and the monthly settlement allocates across the specific bills it clears, so the month-end conversation becomes a printed list rather than a memory test.',
+      },
+      {
+        question: 'Can I see which slow-moving lines are tying up capital?',
+        answer:
+          'The stock summary and ledger statement reports aggregate in SQL, so the position across a wide catalogue stays instant as years of movement pile up — and the lines that have barely moved become visible rather than buried.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B, e-invoice — included?',
+        answer:
+          'Yes, in the single plan. All of it reads the vouchers you raised at the counter, so the return follows the billing you already did instead of being re-entered.',
+      },
+      {
+        question: 'Does the counter keep working when the internet drops?',
+        answer:
+          'Yes. The book is a local encrypted file, so the part lookup and the billing that depend on it do not rest on a broadband line staying up. Cloud backup catches up when the line returns.',
+      },
     ],
   },
   {
@@ -913,6 +1265,38 @@ export const industries: Industry[] = [
       'Bill-by-bill outstanding',
       'Audit log',
     ],
+    faqs: [
+      {
+        question: 'If a lot fails, can I trace which drums from that batch went where?',
+        answer:
+          'Stock journals and delivery challans capture batch number, manufacture and expiry date, and the Stock Ledger shows them — so tracing what came in under a lot as it moved through the godown is real work the software does, rather than a register you keep alongside it.',
+      },
+      {
+        question: 'Input prices swing hard — can I value stock by the actual lots?',
+        answer:
+          'Yes. Set FIFO per item so consumption follows the lots in order instead of dissolving into a long-run average. Valuation layers are written on every inward movement regardless of mode, so switching method later needs no backfill.',
+      },
+      {
+        question: 'Can I keep a segregated store separate from the main yard?',
+        answer:
+          'Yes. Multi-warehouse tracking follows stock per location with proper movements and valuation behind it, so a segregated store is a real position rather than a note on a wall.',
+      },
+      {
+        question: 'Is GST — e-way bill, e-invoice, GSTR-1, GSTR-3B — included for industrial dispatch?',
+        answer:
+          'Yes, in the single plan. The e-way bill and e-invoice are generated from the same voucher that created the dispatch, so the document and the movement cannot disagree, and GSTR-1 and GSTR-3B read those same vouchers.',
+      },
+      {
+        question: 'Can I see my exposure to one large factory buyer?',
+        answer:
+          'Yes. Credit limit and credit days sit on the ledger master, ageing is per invoice, and receipts allocate against specific bills — so exposure to a big account is a report you open rather than a feeling that builds quietly across invoices.',
+      },
+      {
+        question: 'Can I detect an out-of-app edit to the file?',
+        answer:
+          'Posted vouchers never mutate — corrections go through reversals — and privileged actions land in a hash-chained audit log, which makes an edit made to the file outside the app detectable.',
+      },
+    ],
   },
   {
     slug: 'packaging',
@@ -978,6 +1362,38 @@ export const industries: Industry[] = [
       'Multi-warehouse',
       'E-way bill',
     ],
+    faqs: [
+      {
+        question: 'A reel comes in and cartons go out — different items. How is that recorded?',
+        answer:
+          'As a two-legged stock journal: the reel you consumed leaves stock and the converted cartons arrive in stock inside one voucher, with no invented customer or supplier to explain where the paper went. You enter what was consumed and what was produced, so the conversion is a real stock event.',
+      },
+      {
+        question: 'Do I know a job\'s cost during the month, or only at year end?',
+        answer:
+          'Cost of goods sold posts as you go rather than being reconstructed at closing, so the margin on a job is a number you can look at in the month you did it instead of a hope you built into the quote.',
+      },
+      {
+        question: 'Can board and consumables use different valuation methods?',
+        answer:
+          'Yes. Board, where the kraft price swings, can run FIFO while consumables stay on weighted-average — a company default with a per-item override, not one global switch.',
+      },
+      {
+        question: 'Can I track goods sent to an outside converter?',
+        answer:
+          'Yes. Job work tracking covers goods sent out for processing, the rate agreed per job worker and the §143 return exposure, all as reports rather than reminders.',
+      },
+      {
+        question: 'Is GST — e-way bill, GSTR-1, GSTR-3B — included for bulk dispatch?',
+        answer:
+          'Yes, in the single plan. The e-way bill is generated from the voucher that moved the goods, so the document matches the movement by construction, and GSTR-1, GSTR-3B and HSN-wise summaries read the same vouchers.',
+      },
+      {
+        question: 'Can I track the reel store and finished goods separately?',
+        answer:
+          'Yes. Multi-warehouse keeps the reel store and the finished-goods godown as separate locations, each with its own movements and valuation behind it.',
+      },
+    ],
   },
   {
     slug: 'books',
@@ -1042,6 +1458,38 @@ export const industries: Industry[] = [
       'Fast title search',
       'Multi-warehouse',
       'Financial statements',
+    ],
+    faqs: [
+      {
+        question: 'Returns to the distributor are routine here — are they handled cleanly?',
+        answer:
+          'Yes. A return posts as a credit or debit note through the same engine as the sale: stock comes back, the ledger reverses and the bill adjusts, with no journal entry invented afterwards to make a number agree. In this trade returns are planned traffic, so they are first-class vouchers rather than awkward corrections.',
+      },
+      {
+        question: 'A bill can carry a title, a notebook and a gift at different rates — is that handled?',
+        answer:
+          'Yes. Tax category and HSN live on the item master, so a mixed bill taxes each line on its own terms and the HSN-wise summary reflects it, rather than forcing one rate across everything.',
+      },
+      {
+        question: 'Supply and returns run all year — can I state the net position with a distributor?',
+        answer:
+          'Yes. Every supply is a bill, and every payment and every note allocates against specific bills, so the running argument about what is actually owed to a distributor becomes a statement you can print.',
+      },
+      {
+        question: 'Can I look up a title by its ISBN or barcode across ten thousand titles?',
+        answer:
+          'Yes. Store the ISBN in the item\'s SKU, barcode or alias field and search on it against indexed local SQLite, so a ten-thousand-title catalogue does not turn lookup into the bottleneck.',
+      },
+      {
+        question: 'Is GST — GSTR-1, GSTR-3B, e-invoice — included?',
+        answer:
+          'Yes, in the single plan. All of it reads the vouchers you already raised, so the return follows the billing you did rather than a separate re-entry.',
+      },
+      {
+        question: 'Does it run offline on the shop computer?',
+        answer:
+          'Yes. The book is a local encrypted database and the app is keyboard-driven, so billing and lookup keep working through a dropped connection. Cloud sync is an optional encrypted backup.',
+      },
     ],
   },
 ];
