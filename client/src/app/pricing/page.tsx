@@ -173,7 +173,7 @@ export default function PricingPage() {
                 </ButtonLink>
               </div>
               <p className="mt-5 text-center text-sm text-[var(--fg-subtle)]">
-                {windows.sizeHint} · No card to start the trial · macOS and Linux coming soon.
+                Windows &amp; Linux · No card to start the trial · macOS coming soon.
               </p>
             </div>
           </div>

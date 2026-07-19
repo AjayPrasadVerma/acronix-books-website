@@ -27,9 +27,9 @@ const items: FaqItem[] = [
       'You have two options. Take an encrypted backup on your current PC and restore it on the new one, or turn on optional cloud sync, which keeps an isolated encrypted copy of your book and restores it cleanly onto a fresh device. Either way your full history comes with you.',
   },
   {
-    question: 'When will macOS and Linux be available?',
+    question: 'When will macOS be available?',
     answer:
-      'Windows 10 and 11 (64-bit) are available now. macOS (Apple Silicon and Intel) and Linux (AppImage and .deb) builds are in the pipeline — leave your email on the platform cards above to be notified the moment they launch.',
+      'Windows 10 and 11 (64-bit) and Linux (AppImage and .deb) are available now. The macOS build (Apple Silicon and Intel) is in the pipeline — leave your email on the platform cards above to be notified the moment it launches.',
   },
   {
     question: 'How big is the download and what does it need?',

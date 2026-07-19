@@ -44,7 +44,7 @@ const items: FaqItem[] = [
   {
     question: 'Which operating systems are supported?',
     answer:
-      'Windows 10 and 11 (64-bit) are available now. macOS and Linux builds are in the pipeline — you can leave your email on the download page to be notified the moment they launch.',
+      'Windows 10 and 11 (64-bit) and Linux (AppImage and .deb) are available now. The macOS build is in the pipeline — you can leave your email on the download page to be notified the moment it launches.',
   },
   {
     question: 'How do updates work?',

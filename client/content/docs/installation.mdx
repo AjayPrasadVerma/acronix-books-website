@@ -11,19 +11,28 @@ Acronix Books ships as a lightweight desktop app for Windows. Installation takes
 
 | Requirement | Details |
 | --- | --- |
-| Operating system | Windows 10 or Windows 11 (64-bit) |
+| Operating system | Windows 10/11 (64-bit), or Linux as an AppImage / `.deb` |
 | Disk space | ~200 MB for the app; your books grow with your data |
 | RAM | 4 GB minimum, 8 GB recommended |
 | Internet | Only needed for download, updates and optional cloud sync |
 
-macOS and Linux builds are in the pipeline — see the [download page](/download/) to be notified at launch.
+The macOS build is in the pipeline — see the [download page](/download/) to be notified at launch.
 
 ## Download and install
+
+**On Windows:**
 
 1. Download the installer:
    [AcronixBooks-Setup-latest.exe](https://acronixbooks.com/updates/AcronixBooks-Setup-latest.exe) (~80 MB).
 2. Double-click the downloaded file. This is a **per-user installer** — it installs into your own user profile, so Windows will not prompt for an administrator password.
 3. Wait a few seconds for setup to finish. Acronix Books launches automatically.
+
+**On Linux:**
+
+- **AppImage (any distribution):** download
+  [AcronixBooks-latest.AppImage](https://acronixbooks.com/updates/AcronixBooks-latest.AppImage), mark it executable (`chmod +x AcronixBooks-latest.AppImage`) and run it. No installation is needed, and it auto-updates itself.
+- **Debian / Ubuntu (.deb):** download
+  [AcronixBooks-latest.deb](https://acronixbooks.com/updates/AcronixBooks-latest.deb) and install it with `sudo apt install ./AcronixBooks-latest.deb`.
 
 <Callout type="info" title="SmartScreen warning?">
 Early-access builds may show a Windows SmartScreen prompt because the code-signing reputation is still building. Click **More info → Run anyway**. This is expected for new applications and does not indicate a problem.
