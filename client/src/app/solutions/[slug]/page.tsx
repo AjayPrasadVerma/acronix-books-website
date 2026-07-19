@@ -8,6 +8,8 @@ import {
   RelatedLinks,
   TrialCta,
 } from '@/components/marketing/sections';
+import { ComparisonStrip } from '@/components/marketing/ComparisonStrip';
+import { Faq } from '@/components/site/Faq';
 import { solutions, solutionBySlug } from '@/lib/solutions';
 
 // ONE template for every solution — content from lib/solutions.ts, sections
@@ -68,6 +70,18 @@ export default async function SolutionPage({ params }: Params) {
         description="Every capability below ships in the current build."
         items={solution.capabilities}
       />
+
+      <ComparisonStrip />
+
+      {solution.faqs && solution.faqs.length > 0 && (
+        <Faq
+          items={solution.faqs}
+          eyebrow="Questions"
+          title={`${solution.name} — questions, answered`}
+          description="Straight answers on what's in the current build and what it does not do."
+          className="py-20 sm:py-24"
+        />
+      )}
 
       <RelatedLinks
         title="More of what Acronix does"

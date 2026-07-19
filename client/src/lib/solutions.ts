@@ -57,6 +57,9 @@ export interface Solution {
   challenges: { title: string; body: string }[];
   capabilities: { title: string; body: string }[];
   highlights: string[];
+  /** Optional per-solution FAQ. Rendered via the shared Faq component, which
+   *  also emits FAQPage JSON-LD. Optional so an un-enriched entry still builds. */
+  faqs?: { question: string; answer: string }[];
 }
 
 export const solutions: Solution[] = [
@@ -114,6 +117,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['Auto CGST/SGST/IGST', 'HSN on the item', 'Tax-invoice print', 'Keyboard-first', 'E-invoice ready'],
+    faqs: [
+      {
+        question: 'How does Acronix decide between CGST/SGST and IGST on an invoice?',
+        answer:
+          'It derives the split from two state codes — your company state and the party place of supply. When they match it posts CGST plus SGST; when they differ it posts IGST. You never pick the treatment per invoice, so two operators cannot quietly disagree on the same customer.',
+      },
+      {
+        question: 'Do I have to re-select the tax rate and HSN on every line?',
+        answer:
+          'No. Rate and HSN are properties of the item on its master, so they travel onto every voucher line the same way each time. The same item data also feeds the HSN summary your return needs, so nothing is entered a second time.',
+      },
+      {
+        question: 'Can I print a compliant tax invoice straight from the voucher?',
+        answer:
+          'Yes. You print a tax invoice directly from the sale voucher, and Save & Print posts and prints in one keystroke (Ctrl+Shift+P) so counter billing stays a single motion rather than a save-then-hunt-for-print sequence.',
+      },
+      {
+        question: 'Can I raise the e-invoice and e-way bill from the same sale?',
+        answer:
+          'Yes. One sale voucher feeds the ledger, stock, the bill, GSTR-1, the HSN summary, the e-invoice (IRN) payload and the e-way bill payload. The invoice is entered once and every downstream document is built from it.',
+      },
+      {
+        question: 'How fast is billing, and does it need a mouse?',
+        answer:
+          'The app is fully keyboard-driven — function keys per module, Enter to advance a field, Ctrl+K for anything — and targets sub-200ms on common actions. It is built for someone raising a hundred invoices a day, not for a demo.',
+      },
+      {
+        question: 'Can a posted invoice be edited afterwards?',
+        answer:
+          'A posted voucher is immutable. Corrections happen through reversal vouchers rather than a silent edit, so the invoice you printed and the entry in the books can never drift apart and the audit trail stays honest.',
+      },
+    ],
   },
   {
     slug: 'inventory',
@@ -169,6 +204,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['Multi-warehouse', 'FIFO + weighted-average', 'Stock journals', 'Delivery challans', 'Party stock'],
+    faqs: [
+      {
+        question: 'Do I have to choose FIFO or weighted-average once for the whole company?',
+        answer:
+          'No. There is a company default with a per-item override, so a fast-moving commodity and a lot-tracked item can value differently in the same books. Valuation layers are written on every inward movement even in weighted-average mode, so the choice is genuinely per item.',
+      },
+      {
+        question: 'Can I switch an item from weighted-average to FIFO later without a painful backfill?',
+        answer:
+          'Yes. Because the valuation layers are recorded on every inward movement regardless of the current method, switching an item to the other method needs no reconstruction of past cost — the data the other method needs is already there.',
+      },
+      {
+        question: 'Can I move stock between godowns without booking a fake sale?',
+        answer:
+          'Yes. A Stock Journal is a two-legged posting that moves stock between warehouses, qualities or states with no customer and no ledger impact, so internal logistics never pollute your turnover or GST returns.',
+      },
+      {
+        question: 'How do I move goods out before it is a confirmed sale?',
+        answer:
+          'A Delivery Challan moves goods and ownership without posting a ledger entry, and converts to a Sale with one key when it becomes one. The movement is recorded when it happens rather than being backdated into an invoice later.',
+      },
+      {
+        question: 'Does it show stock per warehouse or only a company total?',
+        answer:
+          'Stock is tracked per warehouse with real movements behind every figure, so a godown-wise position is a report you open rather than an estimate. Reorder, minimum and maximum levels sit on the item so shortfalls surface before they bite.',
+      },
+      {
+        question: 'Can I track my goods sitting at someone else’s premises?',
+        answer:
+          'Yes. Party Stock tracks goods by ownership rather than location — your material lying at a processor while still on your books, and someone else’s material sitting in your godown — so the closing stock you report is the stock you actually own.',
+      },
+    ],
   },
   {
     slug: 'accounting',
@@ -224,6 +291,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['One ledger', '10 voucher types', 'Immutable postings', 'Bill-by-bill', 'Period lock', 'Audit chain'],
+    faqs: [
+      {
+        question: 'Do all the different voucher types post the same way?',
+        answer:
+          'Yes. Sale, Purchase, Receipt, Payment, Contra, Journal, Credit Note, Debit Note, Stock Journal and Delivery Challan all post through one shared engine into a single ledger_entries table, driven by one generic form rather than ten cloned ones. New behaviour is a rule on the engine, not a new class of bug.',
+      },
+      {
+        question: 'Can my Trial Balance, P&L and Balance Sheet ever disagree with each other?',
+        answer:
+          'They read from the same canonical ledger, so they are three views of one set of entries rather than three independent calculations. There is no second place for a figure to live, which is exactly why they stay consistent.',
+      },
+      {
+        question: 'Can a posted voucher be edited or deleted?',
+        answer:
+          'No. A posted row is immutable and follows a DRAFT → POSTED → VOID lifecycle. You correct a posted voucher by voiding it through a reversal, never by updating or deleting history — so the audit trail is real, not decoration.',
+      },
+      {
+        question: 'Then how do I fix a mistake in a posted entry?',
+        answer:
+          'You post a reversal, which cancels the original with a fresh entry and leaves both visible. The original stands, the correction stands, and anyone reading the books later can see exactly what happened and when.',
+      },
+      {
+        question: 'Can I lock a filed period so nothing back-dates into it?',
+        answer:
+          'Period lock freezes the books to a date, after which the engine rejects any post, edit or void that would land at or before it. Every lock and unlock is itself recorded, so a reconciled quarter cannot quietly reopen.',
+      },
+      {
+        question: 'Does it handle multiple companies and financial years?',
+        answer:
+          'Yes. Multi-company and multi-financial-year are built in, with company_id on every transactional and master row, so several businesses and several years live in one encrypted book without separate installs or files.',
+      },
+    ],
   },
   {
     slug: 'e-invoice',
@@ -271,6 +370,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['IRP-schema payload', 'Pre-submit validation', 'Response import', 'Role-gated cancel'],
+    faqs: [
+      {
+        question: 'Do I have to re-type the invoice into the IRP portal?',
+        answer:
+          'No. The IRP-schema payload is generated from the sale you already recorded — same party, same lines, same tax — so the e-invoice is built from your books rather than keyed a second time into a government site.',
+      },
+      {
+        question: 'Can I catch problems before I submit to the portal?',
+        answer:
+          'Yes. A dedicated GST validation panel surfaces missing or inconsistent fields — GSTIN, HSN, place of supply — while they are still cheap to fix, instead of letting you discover them at submission, which is the most expensive moment to find them.',
+      },
+      {
+        question: 'Where does the IRN end up after it is generated?',
+        answer:
+          'The signed IRP response is parsed and attached back onto the invoice, so the IRN lives on the voucher itself rather than in a portal download folder that nobody keeps. Your record and the portal record match.',
+      },
+      {
+        question: 'Can I prepare the e-invoice offline and push it when connected?',
+        answer:
+          'The app runs on a local encrypted database, so the payload is built and validated on your machine. You do the assembly and the checking without waiting on the line, and the push happens against the portal when you are connected.',
+      },
+      {
+        question: 'Can I cancel an e-invoice?',
+        answer:
+          'Yes. Cancellation is supported and gated behind the Accountant role, so the ability to reverse an IRN sits with the people who should hold it rather than with anyone at a billing counter.',
+      },
+      {
+        question: 'What data does the payload actually use?',
+        answer:
+          'It is a lossless function of the sale voucher — the party, the lines, the HSN and the tax that produced the invoice. Because it is derived from the same voucher, the e-invoice cannot diverge from the books it came from.',
+      },
+    ],
   },
   {
     slug: 'e-way-bill',
@@ -318,6 +449,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['Transport block', 'Ship-to distance', 'Pre-submit validation', 'Offline-first'],
+    faqs: [
+      {
+        question: 'Where do the vehicle, transporter and mode details go?',
+        answer:
+          'They are captured in a transport block on the voucher that moves the goods, so the payload is complete at the moment you need it instead of being assembled by hand from a slip on the dispatch desk.',
+      },
+      {
+        question: 'Where does the distance figure come from?',
+        answer:
+          'Ship-to addresses carry a distance field on the master, so the number is pulled from there rather than re-guessed per consignment. Guessing distance is a common, avoidable rejection, and this takes the guess out of it.',
+      },
+      {
+        question: 'Is the e-way bill built from the sale I already recorded?',
+        answer:
+          'Yes. The EWB payload is generated from the voucher that created the movement, so vehicle, party, lines and distance all come from data you already entered rather than a separate re-keying of the consignment.',
+      },
+      {
+        question: 'Can it flag missing fields before the portal rejects the bill?',
+        answer:
+          'Yes. The same GST validation surfaces missing or inconsistent fields before submission, so a gap is caught on your screen while it is cheap to fix rather than at the government portal while a truck waits.',
+      },
+      {
+        question: 'Does a dropped connection stop dispatch at the gate?',
+        answer:
+          'No. Billing runs on a local encrypted database, so an outage does not halt the gate — you keep working and the payload is ready to push the moment the line returns. Your books never depend on your broadband.',
+      },
+      {
+        question: 'Can I raise the e-way bill and e-invoice from the same voucher?',
+        answer:
+          'Yes. Both payloads come off the same sale voucher, so one entry drives the invoice, the IRN and the e-way bill rather than three passes at the same consignment in three different places.',
+      },
+    ],
   },
   {
     slug: 'gst-returns',
@@ -369,6 +532,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['GSTR-1', 'GSTR-3B', 'HSN summary', 'Tax registers', 'Portal exports'],
+    faqs: [
+      {
+        question: 'Do I re-enter anything to file GSTR-1 and GSTR-3B?',
+        answer:
+          'No. Both returns are generated from the same vouchers that produced your invoices, so filing month is a read operation rather than an export-and-rebuild project. Everything a return needs is already in the entries you made.',
+      },
+      {
+        question: 'Is the HSN summary produced for me?',
+        answer:
+          'Yes. HSN-wise summaries fall out of the HSN and rate that already sit on each item, alongside input and output tax registers. They are aggregated in SQL, so they stay fast as the year fills up.',
+      },
+      {
+        question: 'Can I export in the shape the portal expects?',
+        answer:
+          'Exports are formatted for the portal’s own templates rather than a generic dump you reshape by hand, so what leaves Acronix is closer to what the portal wants to receive.',
+      },
+      {
+        question: 'What if a 3B figure genuinely needs a manual judgement call?',
+        answer:
+          'The override lives in the system and is gated behind the Accountant role, so a considered adjustment is recorded where it belongs instead of in a side spreadsheet nobody keeps. The judgement call has a home and a trail.',
+      },
+      {
+        question: 'Can I trace a summary total back to the vouchers underneath it?',
+        answer:
+          'Yes. A GST dashboard gives you the period’s position and drills back to the vouchers underneath, so a total is something you can defend line by line rather than assert.',
+      },
+      {
+        question: 'Do the returns stay fast as my volume grows?',
+        answer:
+          'They are aggregated in the database rather than summed in the UI, so a busy year computes as quickly as a quiet one. The books are built to absorb hundreds of thousands of vouchers without the returns slowing down.',
+      },
+    ],
   },
   {
     slug: 'reports',
@@ -420,6 +615,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['Trial Balance', 'P&L & Balance Sheet', 'Cash Flow', 'Day Book', 'Ageing', 'PDF + Excel'],
+    faqs: [
+      {
+        question: 'Which statutory reports are included?',
+        answer:
+          'Trial Balance, Profit & Loss, Balance Sheet and Cash Flow Statement, with group-wise variants. They all read from the one canonical ledger, so the statutory set is internally consistent by construction rather than by reconciliation.',
+      },
+      {
+        question: 'What operational reports do I get beyond the statutory ones?',
+        answer:
+          'Day Book, Cash Book, Ledger Statement, Outstanding and ageing, Sales and Purchase registers, Stock Summary and Stock Ledger — around twenty reports in all, covering the day-to-day questions as well as the year-end ones.',
+      },
+      {
+        question: 'Do reports slow down once the books get big?',
+        answer:
+          'No. Reports are computed where the data lives and come back finished, so a full-year Trial Balance opens as fast as a one-week one. The engine is built to stay quick at hundreds of thousands of vouchers, not just in year one.',
+      },
+      {
+        question: 'Can I trace a figure back to the vouchers behind it?',
+        answer:
+          'Yes. Figures drill back to the entries underneath, so a total is something you can walk an auditor through rather than a number you cannot explain. A figure you cannot trace is a figure you cannot defend.',
+      },
+      {
+        question: 'Can I export reports to PDF and Excel?',
+        answer:
+          'Every report exports cleanly to both PDF and Excel, including voucher lists — so getting a report to your CA is a proper file, not a screenshot. Export is part of the report, not an afterthought bolted on.',
+      },
+      {
+        question: 'How does it stay usable at half a million vouchers?',
+        answer:
+          'Lists open on a sensible working window and search finds anything outside it instantly, while the heavy aggregation happens in the database. The books stay responsive as the years pile up rather than degrading exactly as your business succeeds.',
+      },
+    ],
   },
   {
     slug: 'cloud-sync',
@@ -475,6 +702,38 @@ export const solutions: Solution[] = [
       },
     ],
     highlights: ['Encrypted local book', 'Multi-device restore', 'Email-OTP enrolment', 'TLS 1.2+', 'Fully optional'],
+    faqs: [
+      {
+        question: 'Do I need a cloud account to use Acronix at all?',
+        answer:
+          'No. The app is offline-first and runs fully on your machine with no cloud account. Sync is a convenience you switch on for off-site backup and multi-device restore — leave it off and your books never leave your machine.',
+      },
+      {
+        question: 'If my PC dies, can I get my books onto a new machine?',
+        answer:
+          'Yes, if sync is on. You sign in on a replacement machine and pull the whole book back down. Restoring onto a new PC is the moment you find out whether a backup was real, and this is the path that makes it real.',
+      },
+      {
+        question: 'What stops someone else restoring my book on their own device?',
+        answer:
+          'A new device must pass an emailed one-time code before its first full pull — the moment the data-access risk actually exists. Routine logins on a device you have already enrolled are not re-challenged, so the friction lands only where it matters.',
+      },
+      {
+        question: 'Is the connection to the server secure?',
+        answer:
+          'The server accepts no plaintext HTTP — every request is TLS 1.2+ with HSTS — and refresh tokens rotate with reuse detection, so a stolen token family is revoked. Auth and sync endpoints are rate-limited and their mutations are written to a server audit log.',
+      },
+      {
+        question: 'Is the cloud copy end-to-end encrypted?',
+        answer:
+          'No — and it is worth knowing exactly what sits on the server. Cloud sync keeps a readable mirror of the synced company: it is not end-to-end encrypted, and the financial data is readable server-side by design, which is what lets the books be queried directly rather than only restored. That copy is scoped to your account and access-audited, the transport is TLS 1.2+, and authentication secrets are stored separately encrypted. Your local file and its .acxb backups stay AES-256 SQLCipher-encrypted regardless, and sync is optional — leave it off and nothing leaves your machine.',
+      },
+      {
+        question: 'Is my local file encrypted whether or not I turn sync on?',
+        answer:
+          'Yes. Your book is a SQLCipher-encrypted file on your own machine, and its .acxb backups are encrypted too. Copied to a pen drive it is unreadable bytes. That protection does not depend on sync and does not change whether or not you use it.',
+      },
+    ],
   },
 ];
 
