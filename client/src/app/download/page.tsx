@@ -38,7 +38,7 @@ import { DownloadFaq } from '@/components/download/DownloadFaq';
 export const metadata: Metadata = {
   title: 'Download',
   description:
-    'Download Acronix Books free for Windows and Linux — a fast, offline-first GST accounting & ERP desktop app for Indian businesses of every size. GST-ready invoicing, inventory and vouchers, encrypted at rest. macOS coming soon.',
+    'Download Acronix Books for Windows and Linux and start a free 14-day trial — a fast, offline-first GST accounting & ERP desktop app for Indian businesses of every size. GST-ready invoicing, inventory and vouchers, encrypted at rest. macOS coming soon.',
   alternates: { canonical: '/download/' },
 };
 
@@ -157,7 +157,7 @@ export default function DownloadPage() {
     ...(releaseDate ? [{ label: 'Released', value: releaseDate }] : []),
     { label: 'Platform', value: 'Windows 10 & 11 · 64-bit' },
     { label: 'Download size', value: '~80 MB' },
-    { label: 'License', value: 'Free · Early access' },
+    { label: 'License', value: '14-day trial, then ₹11,999/yr' },
     { label: 'Updates', value: 'Automatic' },
   ];
 

@@ -112,7 +112,7 @@ function PlatformCard({
               </a>
             )}
             <p className="mt-2 text-center text-xs text-[var(--fg-subtle)]">
-              Free · No account required
+              Free 14-day trial · No card to start
             </p>
           </>
         ) : (
