@@ -17,7 +17,7 @@ import { FinalCta } from '@/components/landing/FinalCta';
 
 export const metadata: Metadata = {
   description:
-    'Acronix Books is a fast, offline-first ERP & accounting desktop app for Indian businesses of every size — GST-ready invoicing, inventory, vouchers, one-click GSTR-1/3B, and AES-256 encrypted books. Free to download for Windows.',
+    'Acronix Books is a fast, offline-first ERP & accounting desktop app for Indian businesses of every size — GST-ready invoicing, inventory, vouchers, one-click GSTR-1/3B, and AES-256 encrypted books. Free 14-day trial for Windows and Linux.',
   alternates: { canonical: '/' },
 };
 

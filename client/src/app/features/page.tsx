@@ -513,9 +513,9 @@ const faqs: FaqItem[] = [
       'Yes — completely. Acronix Books is offline-first: every screen, voucher, report, and export runs against your local database with no internet connection required. There is no cloud round-trip in the critical path, which is a big part of why common actions land in under 200ms.\n\nCloud sync is entirely optional. When you turn it on, the app still works fully offline and reconciles with the cloud only when you have a connection.',
   },
   {
-    question: 'Is it really free?',
+    question: 'Is it free?',
     answer:
-      'Yes. Acronix Books is free to download and use during its early-access period (currently v0.1.0). You can install it and run your real books today at no cost.',
+      'It is free to try. Every feature is unlocked for a 14-day trial with no card required; after that it is ₹11,999 a year plus GST for the single plan. Your books live in an encrypted file on your own machine, so even without a subscription you keep full read and export access forever — only new entries stop.',
   },
   {
     question: 'Which GST returns and documents are supported?',
@@ -716,7 +716,7 @@ export default function FeaturesPage() {
             See it run on your own books
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-[var(--fg-muted)]">
-            Free to download while in early access. Install in seconds — it auto-updates from there.
+            Free 14-day trial, no card. Install in seconds — it auto-updates from there.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <ButtonLink href="/download/" size="lg">

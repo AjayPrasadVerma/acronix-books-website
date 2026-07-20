@@ -2,9 +2,9 @@ import { Faq, type FaqItem } from '@/components/site/Faq';
 
 const items: FaqItem[] = [
   {
-    question: 'Is it really free?',
+    question: 'Is it free?',
     answer:
-      'Yes. Acronix Books is free to download and use during early access (version 0.1.0). There is no trial timer and no credit card — you download the installer and start keeping books straight away.',
+      'It is free to try, not free forever. The download and a 14-day trial cost nothing and need no card, with every feature unlocked. After that it is ₹11,999 a year plus GST for the single plan. Your books are a local encrypted file, so even if you never renew you keep full read and export access forever — only new entries stop.',
   },
   {
     question: 'Do I need an account to use it?',

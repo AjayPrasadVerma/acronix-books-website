@@ -7,9 +7,9 @@ const items: FaqItem[] = [
       'Acronix Books is a modern ERP and accounting desktop app built for Indian businesses of every size. It brings multi-company accounting, the full voucher set, GST invoicing with one-click GSTR-1 and GSTR-3B, inventory, and reporting into a single fast, offline-first application. It is designed to feel as quick as the old keyboard-driven tools while looking and behaving like modern software.',
   },
   {
-    question: 'Is Acronix Books really free?',
+    question: 'Is Acronix Books free?',
     answer:
-      'Yes. Acronix Books is free to download and use during its early-access period (currently version 0.1.0). There is no trial timer, no credit card, and no account required to work offline — you download the installer and start keeping books.',
+      'It is free to try, not free forever. You get a 14-day trial with every feature unlocked and no card required, then it is ₹11,999 a year plus GST for the single plan — nothing is held back or sold as an add-on. Because your books are an encrypted file on your own machine, even if you never renew you keep full read and export access forever; the app simply stops accepting new entries.',
   },
   {
     question: 'Does it work fully offline?',

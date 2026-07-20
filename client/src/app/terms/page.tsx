@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { LegalLayout } from '@/components/legal/LegalLayout';
-import { company, site } from '@/lib/site';
+import { company, plan, site } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
@@ -29,9 +29,17 @@ export default function TermsPage() {
 
       <h2>1. Licence to use the software</h2>
       <p>
-        Acronix Books is currently offered <strong>free of charge during an early-access period</strong>.
-        We grant you a personal, non-exclusive, non-transferable, revocable licence to install and
-        use the software for your business or professional accounting purposes.
+        Acronix Books is offered as a paid annual subscription with a{' '}
+        <strong>{plan.trialDays}-day free trial</strong>; the current price is shown on our{' '}
+        <a href="/pricing/">Pricing page</a>. Activating a licence grants you a personal,
+        non-exclusive, non-transferable, revocable licence to install and use the software for your
+        business or professional accounting purposes for the paid period.
+      </p>
+      <p>
+        Billing, cancellation and our no-refund-after-purchase policy are set out in the{' '}
+        <a href="/refund/">Refund &amp; Cancellation Policy</a>. If a subscription lapses, the app
+        switches to read-only: you keep full read and export access to your own books and only lose
+        the ability to record new entries.
       </p>
       <p>
         Early-access software is under active development. Features may change, be added, or be
@@ -86,9 +94,8 @@ export default function TermsPage() {
         To the maximum extent permitted by law, {company.legalName} will not be liable for any
         indirect, incidental, special, consequential, or punitive damages, or for any loss of
         profits, revenue, data, or goodwill, arising out of or in connection with your use of — or
-        inability to use — the Service. Because the software is provided free of charge during early
-        access, our aggregate liability is limited to the amount you have paid us for the Service,
-        which during early access is zero.
+        inability to use — the Service. Our aggregate liability for any claim is limited to the
+        amount you have paid us for the Service in the twelve months preceding the claim.
       </p>
 
       <h2>6. Intellectual property</h2>
@@ -99,12 +106,11 @@ export default function TermsPage() {
         remains yours.
       </p>
 
-      <h2>7. Changes to the Service</h2>
+      <h2>7. Changes to the Service and pricing</h2>
       <p>
-        We may modify, suspend, or discontinue any part of the Service at any time. If we introduce
-        paid plans in the future, we will publish the applicable terms and pricing before they take
-        effect, and the free early-access licence terms will not be applied retroactively to charge
-        you.
+        We may modify, suspend, or discontinue any part of the Service at any time. If we change the
+        subscription price, the new price applies from your next renewal, never retroactively to a
+        period you have already paid for; we will publish any change before it takes effect.
       </p>
 
       <h2>8. Termination</h2>

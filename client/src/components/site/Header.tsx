@@ -71,7 +71,7 @@ export function Header() {
             <MobileNav isActive={isActive} />
             <ButtonLink href="/download/" className="mt-2 w-full">
               <Download className="h-4 w-4" />
-              Download for free
+              Start free trial
             </ButtonLink>
           </div>
         </div>

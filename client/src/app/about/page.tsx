@@ -196,7 +196,7 @@ export default function AboutPage() {
             Try it on your own books
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-[var(--fg-muted)]">
-            Free to download while in early access. Install in seconds — it auto-updates from there.
+            Free 14-day trial, no card. Install in seconds — it auto-updates from there.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <ButtonLink href="/download/" size="lg">
