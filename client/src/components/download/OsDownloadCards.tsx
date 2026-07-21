@@ -4,7 +4,7 @@ import { useEffect, useState, type ComponentType } from 'react';
 import { Apple, Clock, Download, MonitorDown, Terminal } from 'lucide-react';
 import { Badge } from '@/components/ui/Primitives';
 import { Button, ButtonLink } from '@/components/ui/Button';
-import { downloads, type DownloadTarget, type Platform } from '@/lib/site';
+import { downloads, thankYouHref, type DownloadTarget, type Platform } from '@/lib/site';
 import { cn } from '@/lib/utils';
 import { NotifyForm } from './NotifyForm';
 
@@ -99,13 +99,17 @@ function PlatformCard({
       <div className="mt-auto pt-5">
         {available && target.href ? (
           <>
-            <ButtonLink href={target.href} className="w-full">
+            <ButtonLink
+              href={target.downloadKey ? thankYouHref(target.downloadKey) : target.href}
+              external={!target.downloadKey}
+              className="w-full"
+            >
               <Download className="h-4 w-4" aria-hidden="true" />
               Download for {target.label}
             </ButtonLink>
             {target.altHref && (
               <a
-                href={target.altHref}
+                href={target.altDownloadKey ? thankYouHref(target.altDownloadKey) : target.altHref}
                 className="mt-2 block text-center text-xs font-medium text-brand-600 underline underline-offset-2 hover:text-brand-700 dark:text-brand-400"
               >
                 {target.altLabel ?? 'Other format'}

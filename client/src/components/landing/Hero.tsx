@@ -3,12 +3,11 @@ import { Download, Check, KeyRound } from 'lucide-react';
 import { ButtonLink } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Primitives';
 import { Container } from '@/components/ui/Container';
-import { downloads, plan, site } from '@/lib/site';
+import { plan, site, thankYouHref } from '@/lib/site';
 import { DashboardMock } from '@/components/mockups/DashboardMock';
 
 // e.g. "0.1.0" -> "0.1" for the early-access badge.
 const shortVersion = site.currentVersion.split('.').slice(0, 2).join('.');
-const win = downloads.windows;
 
 // Tally-style scannable value props — instant business credibility.
 const highlights = [
@@ -48,7 +47,7 @@ export function Hero() {
               <KeyRound className="h-5 w-5" />
               Start your {plan.trialDays}-day trial
             </ButtonLink>
-            <ButtonLink href={win.href ?? '/download/'} external variant="outline" size="lg">
+            <ButtonLink href={thankYouHref('windows')} variant="outline" size="lg">
               <Download className="h-5 w-5" />
               Download for Windows
             </ButtonLink>
