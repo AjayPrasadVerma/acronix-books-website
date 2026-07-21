@@ -23,7 +23,7 @@ export const site = {
   shortName: 'Acronix',
   /** Public production origin — used for canonical URLs, sitemap, OG tags. */
   url: 'https://acronixbooks.com',
-  tagline: 'Modern ERP + Accounting for Indian business',
+  tagline: 'Modern ERP & Accounting for Indian business',
   description:
     'Acronix Books is a fast, offline-first ERP & accounting desktop app for Indian businesses of every size — GST-ready invoicing, inventory, vouchers, GSTR-1/3B, and encrypted cloud backup. Beat Tally on UX, beat Zoho on offline speed.',
   locale: 'en_IN',
@@ -57,6 +57,18 @@ export const company = {
   governingLawState: 'Gujarat, India',
   responseTime: 'within 1–2 business days',
 } as const;
+
+/**
+ * Parent-company (Acronix) social profiles, mirrored from acronix.in and
+ * surfaced in the site footer. Acronix Books has no separate accounts — these
+ * are the canonical channels. `label` doubles as the icon key in the footer.
+ */
+export const social = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/acronixsolutions' },
+  { label: 'X', href: 'https://x.com/acronix_in' },
+  { label: 'Instagram', href: 'https://www.instagram.com/acronix.in/' },
+  { label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61588016175923' },
+] as const;
 
 /**
  * The auto-update feed root (electron-updater generic provider). The stable

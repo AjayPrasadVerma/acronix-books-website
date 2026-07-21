@@ -27,6 +27,10 @@ export function Header() {
   const isActive = (href: string) =>
     href !== '/' && pathname?.startsWith(href.replace(/\/$/, ''));
 
+  // On the download page the CTA just points back here — hide it so it does
+  // not read as the real "Download for Windows" button on that page.
+  const onDownloadPage = pathname?.startsWith('/download') ?? false;
+
   return (
     <header
       className={cn(
@@ -45,10 +49,12 @@ export function Header() {
 
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
-          <ButtonLink href="/download/" size="sm">
-            <Download className="h-4 w-4" />
-            Download
-          </ButtonLink>
+          {!onDownloadPage && (
+            <ButtonLink href="/download/" size="sm">
+              <Download className="h-4 w-4" />
+              Download
+            </ButtonLink>
+          )}
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
@@ -69,10 +75,12 @@ export function Header() {
         <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-[var(--border)] bg-[var(--bg)] md:hidden">
           <div className="flex flex-col gap-1 px-5 py-4">
             <MobileNav isActive={isActive} />
-            <ButtonLink href="/download/" className="mt-2 w-full">
-              <Download className="h-4 w-4" />
-              Start free trial
-            </ButtonLink>
+            {!onDownloadPage && (
+              <ButtonLink href="/download/" className="mt-2 w-full">
+                <Download className="h-4 w-4" />
+                Start free trial
+              </ButtonLink>
+            )}
           </div>
         </div>
       )}

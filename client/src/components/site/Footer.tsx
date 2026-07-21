@@ -1,8 +1,16 @@
 import Link from 'next/link';
-import { Mail, Phone } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Mail, Phone, Twitter, type LucideIcon } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { Container } from '@/components/ui/Container';
-import { company, nav, site, type NavLink } from '@/lib/site';
+import { company, nav, site, social, type NavLink } from '@/lib/site';
+
+/** Maps a social `label` from site.ts to its brand icon. X reuses the bird. */
+const socialIcon: Record<(typeof social)[number]['label'], LucideIcon> = {
+  LinkedIn: Linkedin,
+  X: Twitter,
+  Instagram: Instagram,
+  Facebook: Facebook,
+};
 
 /** Shared leaf — mailto: needs a plain anchor, everything else routes. */
 function FooterLink({ link }: { link: NavLink }) {
@@ -32,6 +40,24 @@ export function Footer() {
             {site.tagline}. Built for Indian businesses of every size — offline-first, GST-ready,
             and secure by default.
           </p>
+          <ul className="mt-6 flex items-center gap-3">
+            {social.map(({ label, href }) => {
+              const Icon = socialIcon[label];
+              return (
+                <li key={label}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Acronix on ${label}`}
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--fg-muted)] transition-colors hover:border-brand-600/30 hover:text-brand-600 dark:hover:border-brand-400/30 dark:hover:text-brand-400"
+                  >
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
         <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
