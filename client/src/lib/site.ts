@@ -29,8 +29,16 @@ export const site = {
   locale: 'en_IN',
   twitter: '@acronixbooks',
   email: 'support@acronixbooks.com',
-  /** Current shipped desktop version — bump alongside apps/desktop/package.json. */
-  currentVersion: '0.1.0',
+  /**
+   * Current shipped desktop version + its release date (YYYY-MM-DD). Derived at
+   * build time from the update feed's latest.yml (see next.config.mjs) — every
+   * surface that shows a version reads from here, so a production build tracks
+   * the feed automatically. The literals are the offline/dev fallback; keep them
+   * as the last-known-good value. Changelog notes stay hand-written in
+   * content/releases.ts.
+   */
+  currentVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0',
+  currentReleaseDate: process.env.NEXT_PUBLIC_APP_RELEASE_DATE ?? '2026-06-24',
 } as const;
 
 /**
