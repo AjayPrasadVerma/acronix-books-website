@@ -23,7 +23,7 @@ export const site = {
   shortName: 'Acronix',
   /** Public production origin — used for canonical URLs, sitemap, OG tags. */
   url: 'https://acronixbooks.com',
-  tagline: 'Modern ERP + Accounting for Indian business',
+  tagline: 'Modern ERP & Accounting for Indian business',
   description:
     'Acronix Books is a fast, offline-first ERP & accounting desktop app for Indian businesses of every size — GST-ready invoicing, inventory, vouchers, GSTR-1/3B, and encrypted cloud backup. Beat Tally on UX, beat Zoho on offline speed.',
   locale: 'en_IN',
