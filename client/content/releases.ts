@@ -11,6 +11,35 @@ import type { ReleaseNote } from '@/lib/content';
  */
 export const releases: ReleaseNote[] = [
   {
+    version: '0.1.1',
+    date: '2026-07-21',
+    summary:
+      'The first auto-updating release — installed 0.1.0 apps update themselves, or press Ctrl+U. One owner password now unlocks the app and signs you in to the cloud, and restoring your books on a new device no longer asks for a separate password.',
+    sections: [
+      {
+        title: 'Added',
+        items: [
+          'One password identity — the same owner password unlocks Acronix Books on your device and signs you in to your cloud account. Change it once and both update together, signing out every other device.',
+          'Automatic updates — from 0.1.0 onward the app downloads and installs new versions itself; check any time with Ctrl+U.',
+          'A confirmation email whenever your account password is changed.',
+        ],
+      },
+      {
+        title: 'Changed',
+        items: [
+          'Restoring your books on a new device no longer asks you to set a separate password — your cloud sign-in unlocks the restored data.',
+          'Only the business owner can change the owner password.',
+        ],
+      },
+      {
+        title: 'Fixed',
+        items: [
+          'Enter now advances through the cloud-restore screens and submits on the last field, matching the Login screen.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.1.0',
     date: '2026-06-24',
     summary:
