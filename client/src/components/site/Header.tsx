@@ -27,9 +27,11 @@ export function Header() {
   const isActive = (href: string) =>
     href !== '/' && pathname?.startsWith(href.replace(/\/$/, ''));
 
-  // On the download page the CTA just points back here — hide it so it does
-  // not read as the real "Download for Windows" button on that page.
-  const onDownloadPage = pathname?.startsWith('/download') ?? false;
+  // On the download and thank-you pages the header CTA just points back to
+  // where the visitor already is — hide it so it does not read as the real
+  // "Download for Windows" button or send a just-downloaded visitor in circles.
+  const onDownloadPage =
+    (pathname?.startsWith('/download') || pathname?.startsWith('/thank-you')) ?? false;
 
   return (
     <header

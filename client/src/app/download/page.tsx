@@ -26,7 +26,7 @@ import {
 import { Container } from '@/components/ui/Container';
 import { Badge, Eyebrow, SectionHeading } from '@/components/ui/Primitives';
 import { ButtonLink } from '@/components/ui/Button';
-import { downloads, site } from '@/lib/site';
+import { downloads, site, thankYouHref } from '@/lib/site';
 import { OsDownloadCards } from '@/components/download/OsDownloadCards';
 import { UpdateChecker } from '@/components/download/UpdateChecker';
 import { FirstRun } from '@/components/download/FirstRun';
@@ -224,7 +224,7 @@ export default function DownloadPage() {
 
                 {windows.href && (
                   <div className="relative mt-6">
-                    <ButtonLink href={windows.href} size="lg" className="w-full">
+                    <ButtonLink href={thankYouHref('windows')} size="lg" className="w-full">
                       <Download className="h-5 w-5" aria-hidden="true" />
                       Download for Windows
                     </ButtonLink>

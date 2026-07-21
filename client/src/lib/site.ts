@@ -141,6 +141,28 @@ export const priceInclusiveGst = (): number | null =>
 
 export type Platform = 'windows' | 'mac' | 'linux' | 'unknown';
 
+/**
+ * Concrete installer files a download click resolves to, keyed by the stable
+ * slug used in the `/thank-you/?d=` redirect. Linux ships two files, so this is
+ * finer-grained than the platform-keyed `downloads` map below. Each `href` is a
+ * same-origin update-feed URL — that is what lets the /thank-you/ page start the
+ * download itself. Never resolve a download from raw user input: the key must
+ * match one of these fixed entries (no open-redirect / arbitrary-download hole).
+ */
+export const downloadFiles = {
+  windows: { label: 'Windows', href: updateFeed.windowsInstaller },
+  'linux-appimage': { label: 'Linux · AppImage', href: updateFeed.linuxAppImage },
+  'linux-deb': { label: 'Linux · .deb', href: updateFeed.linuxDeb },
+} as const;
+
+export type DownloadFileKey = keyof typeof downloadFiles;
+
+/** Route every download CTA through /thank-you/, which starts the real file
+ *  download on load and shows next-step suggestions. */
+export function thankYouHref(key: DownloadFileKey): string {
+  return `/thank-you/?d=${key}`;
+}
+
 export interface DownloadTarget {
   platform: Platform;
   label: string;
@@ -151,6 +173,9 @@ export interface DownloadTarget {
   /** Optional second format for the same OS (e.g. Linux .deb under the AppImage). */
   altHref?: string | null;
   altLabel?: string;
+  /** Thank-you redirect keys for the primary and alternate files. */
+  downloadKey?: DownloadFileKey;
+  altDownloadKey?: DownloadFileKey;
   status: 'available' | 'coming-soon';
   note: string;
 }
@@ -161,6 +186,7 @@ export const downloads: Record<Exclude<Platform, 'unknown'>, DownloadTarget> = {
     label: 'Windows',
     sizeHint: 'Windows 10 & 11 · 64-bit · ~80 MB',
     href: updateFeed.windowsInstaller,
+    downloadKey: 'windows',
     status: 'available',
     note: 'One-click installer. Auto-updates itself once installed.',
   },
@@ -179,6 +205,8 @@ export const downloads: Record<Exclude<Platform, 'unknown'>, DownloadTarget> = {
     href: updateFeed.linuxAppImage,
     altHref: updateFeed.linuxDeb,
     altLabel: 'Download .deb (Debian / Ubuntu)',
+    downloadKey: 'linux-appimage',
+    altDownloadKey: 'linux-deb',
     status: 'available',
     note: 'AppImage runs on most distributions and auto-updates itself; a .deb is provided for Debian and Ubuntu.',
   },
