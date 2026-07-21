@@ -2,6 +2,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import { site } from '@/lib/site';
 import { mdxComponents } from './mdx-components';
 
 /**
@@ -28,6 +29,9 @@ export function Mdx({ source }: { source: string }) {
       source={source}
       components={mdxComponents}
       options={{
+        // Exposes `{version}` (and future vars) to every MDX doc so prose can
+        // track the shipped release instead of hard-coding it. See site.ts.
+        scope: { version: site.currentVersion },
         mdxOptions: {
           remarkPlugins: [remarkGfm],
           rehypePlugins: [

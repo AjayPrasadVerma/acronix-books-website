@@ -16,6 +16,13 @@ on:
       - '.github/workflows/deploy.yml'
       - 'deploy/**'
   workflow_dispatch:
+  # Fired by the product repo's release workflow after it uploads a new build to
+  # the update feed, so the site rebuilds and re-derives `currentVersion` from
+  # the fresh latest.yml (see client/next.config.mjs). No site code changes, so
+  # the push trigger above never sees it — this is the only path for a
+  # release-driven redeploy.
+  repository_dispatch:
+    types: [desktop-release]
 
 concurrency:
   group: deploy-production

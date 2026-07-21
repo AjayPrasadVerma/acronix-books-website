@@ -27,7 +27,6 @@ import { Container } from '@/components/ui/Container';
 import { Badge, Eyebrow, SectionHeading } from '@/components/ui/Primitives';
 import { ButtonLink } from '@/components/ui/Button';
 import { downloads, site } from '@/lib/site';
-import { getReleases } from '@/lib/content';
 import { OsDownloadCards } from '@/components/download/OsDownloadCards';
 import { UpdateChecker } from '@/components/download/UpdateChecker';
 import { FirstRun } from '@/components/download/FirstRun';
@@ -149,12 +148,9 @@ const REQUIREMENTS = [
 ];
 
 export default function DownloadPage() {
-  const latest = getReleases()[0];
-  const releaseDate = latest ? formatDate(latest.date) : null;
-
   const META: { label: string; value: string }[] = [
     { label: 'Version', value: `v${site.currentVersion}` },
-    ...(releaseDate ? [{ label: 'Released', value: releaseDate }] : []),
+    { label: 'Released', value: formatDate(site.currentReleaseDate) },
     { label: 'Platform', value: 'Windows 10 & 11 · 64-bit' },
     { label: 'Download size', value: '~80 MB' },
     { label: 'License', value: '14-day trial, then ₹11,999/yr' },
@@ -277,7 +273,7 @@ export default function DownloadPage() {
             align="left"
             eyebrow="What's included"
             title="A full ERP in one download"
-            description="Everything below ships in v0.1.0 — no add-ons, no paywalled tiers during early access."
+            description={`Everything below ships in v${site.currentVersion} — no add-ons, no paywalled tiers during early access.`}
             className="max-w-2xl"
           />
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
